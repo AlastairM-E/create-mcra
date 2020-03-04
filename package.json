@@ -1,0 +1,16 @@
+{
+  "name": "create-mcra",
+  "version": "0.0.2",
+  "main": "index.js",
+  "license": "MIT",
+  "bin": {
+    "mcra": "index.js",
+    "create-mcra": "index.js"
+  },
+  "scripts": {
+    "latest": " yarn unlink & yarn link"
+  },
+  "dependencies": {
+    "create-react-app": "^3.4.0"
+  }
+}
