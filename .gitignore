@@ -6,7 +6,8 @@
 /.pnp
 /yarn.lock
 .pnp.js
-.npmignore
+plan.txt
+
 
 # testing
 /coverage
