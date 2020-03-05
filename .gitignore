@@ -6,7 +6,12 @@
 /.pnp
 /yarn.lock
 .pnp.js
+<<<<<<< HEAD
 .npmignore
+=======
+plan.txt
+
+>>>>>>> mcv0.0.1
 
 # testing
 /coverage
