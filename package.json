@@ -1,11 +1,16 @@
 {
   "name": "create-mcra",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "index.js",
   "license": "MIT",
   "bin": {
     "mcra": "index.js",
     "create-mcra": "index.js"
+  },
+  "description": "Extending the tools for the create-react-app project in order to improve your developer experience.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlastairM-E/create-mcra"
   },
   "scripts": {
     "latest": " yarn unlink & yarn link"
