@@ -1,45 +1,43 @@
 #!/usr/bin/env node
-const { readSubFilesFrom } = require('create-rboil-utils');
+/* IMPORTS */
 const process = require('process');
 const fs = require('fs');
-
-const currentDirectory  = process.cwd();
-const componentsDirectory = `${currentDirectory}/src/components`
+const { readSubFilesFrom, appendToFileLines } = require('create-rboil-utils');
 
 function gen(arguments) {
+    /* VARIABLES */
     const nameOfModule = arguments[1];
+    const currentDirectory  = process.cwd();
     const srcDirectory = readSubFilesFrom(`${currentDirectory}/src`);
-    const initialIndexJsFile = `
-        import ${nameOfModule} from '${nameOfModule}/${nameOfModule}.jsx';
+    const components = `${currentDirectory}/src/components`;
+
+const initialIndexJsFile = 
+`import ${nameOfModule} from '${nameOfModule}/${nameOfModule}.jsx';
         
-        export default {
-            ${nameOfModule},
-        };
-    `;
-    
-    if (srcDirectory.length === 0) {
-        fs.mkdirSync(componentsDirectory);
-    };
+export default {
+    ${nameOfModule},
+};`;
 
-    srcDirectory.forEach(file => {
+    /* LOGIC */
+
+    //Adding components dir
+    const hasComponentFileBeenAdded = srcDirectory.filter(file => {
         const folder = 'object';
-        if (typeof(file) === folder && file.directory !== 'components') {
-            fs.mkdirSync(componentsDirectory)
+        if (typeof(file) === folder && file.directory === 'components') {
+            return true;
         };
+        return false;
     });
 
-    const componentsDirFiles = readSubFilesFrom(componentsDirectory);
+    if (srcDirectory.length === 0 || hasComponentFileBeenAdded.length === 0) {
+        fs.mkdirSync(components);
+    };
 
+    //Adding index.js
+    const componentsDirFiles = readSubFilesFrom(components);
     if (componentsDirFiles.length === 0) {
-        fs.writeFileSync(`${componentsDirectory}/index.js`, initialIndexJsFile);
+        fs.writeFileSync(`${components}/index.js`, initialIndexJsFile);
     };
-
-    componentsDirFiles.forEach(file => {
-        const folder = 'object';
-        if (typeof(file) === folder && file.directory !== 'components') {
-            fs.mkdirSync(`${componentsDirectory}/index.js`)
-        };
-    });
     
     
     //add a formula of xyz.
