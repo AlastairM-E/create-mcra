@@ -1,16 +1,22 @@
 #!/usr/bin/env node
-const { execSync } = require('child_process');
 const { argv } = require('process');
 
-const arguments = argv.splice(2).join(' ');
+const { createBoilerplate, gen, imp } = require('./commands');
 
-console.log('create-react-app magic: this will take a couple of minutes so relax');
+const arguments = argv.splice(2);
 
-execSync(`npx create-react-app ${arguments}`);
+console.log(arguments[0]);
 
-console.log(`
-    The wait is finally over, please:
+switch (arguments[0]) {
+    case 'gen':
+        gen(arguments);
+        break;
 
-    cd ${argument[0]}
-    npm/yarn start
-`);
+    case 'imp':
+        imp(arguments);
+        break;
+
+    default:
+        createBoilerplate(arguments.join(' '));
+        break;
+};
