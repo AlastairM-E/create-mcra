@@ -3,6 +3,7 @@ function initialIndexJsFile (nameOfModule) {
         
 export default {
     ${nameOfModule},
+
 };`;
 };
 
@@ -20,7 +21,7 @@ function ${nameOfModule}() {
     
 };
 
-export default gen_templates;`;
+export default ${nameOfModule};`;
 };
 
 function jestTestingTemplateFile(nameOfModule) {

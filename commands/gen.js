@@ -36,7 +36,7 @@ function gen(arguments) {
 
     //Adding index.js
     const componentsDirFiles = readSubFilesFrom(components);
-    const numberOfModules = componentsDirFiles.length -1;
+    const numberOfModules = componentsDirFiles.length - 1;
     const hasIndexJsFileBeenAdded = componentsDirFiles.filter(file => file === 'index.js');
 
     console.log(hasIndexJsFileBeenAdded);
@@ -45,19 +45,20 @@ function gen(arguments) {
         fs.writeFileSync(`${components}/index.js`, initialIndexJsFile(nameOfModule));
         return null;
     } else {
+        console.log('numerb of ModulesL', numberOfModules, numberOfModules + 3);
         appendToFileLines(
             `${components}/index.js`, 
-            `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx'`,
-            [numberOfModules + 1, numberOfModules + 2],
+            `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx';\n`,
+            [numberOfModules, numberOfModules],
+            false
+        );
+
+        appendToFileLines(
+            `${components}/index.js`, 
+            `\t${nameOfModule},`,
+            [numberOfModules + 5, numberOfModules + 5],
             true
         );
-    
-        // appendToFileLines(
-        //     `${components}/index.js`, 
-        //     `${nameOfModule},`,
-        //     [numberOfModules + 4, numberOfModules + 4],
-        //     true
-        // );
     };
 
     
