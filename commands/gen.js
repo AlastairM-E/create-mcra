@@ -2,17 +2,22 @@
 /* IMPORTS */
 const process = require('process');
 const fs = require('fs');
-const homedir = require('os').homedir();
 
-console.log('process :', process.env);
+function dynamicTemplateRequire() {
+    try {
+        return require('mcra-user-preferences/user_gen_templates')
+    } catch(e) {
+        return require('./gen_templates');
+    };
+};
 
 const { 
     initialIndexJsFile, 
     reactFunctionalTemplateFile, 
     jestTestingTemplateFile, 
     reactClassTemplateFile 
-} = require(`./../../../../${homedir}/mcra-user-preferences/user_gen_template.js`) || require('./gen_templates');
-const { readSubFilesFrom, appendToFileLines } = require('create-rboil-utils');
+} = dynamicTemplateRequire();
+const { readSubFilesFrom, appendToFileLines } =  require('create-rboil-utils');
 
 function gen(arguments) {
     /* VARIABLES */

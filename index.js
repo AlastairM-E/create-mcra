@@ -5,6 +5,7 @@ const { createBoilerplate, gen, imp, adapt } = require('./commands');
 
 const arguments = argv.splice(2);
 
+
 switch (arguments[0]) {
     case 'gen':
         gen(arguments);

@@ -1,6 +1,5 @@
 /* IMPORTS */
 const fs = require('fs');
-const homedir = require('os').homedir();
 const path = require('path');
 const process = require('process');
 
@@ -9,15 +8,13 @@ const inquirer = require('inquirer');
 /* ADAPT */
 function adapt(arguments) {
     /* VARIABLES */
-    const mcraUserPreferences =`${homedir}/mcra-user-preferences`;
-    const adaptJson = `${mcraUserPreferences}/adapt.json`;
+    const mcraUserPreferences = path.join(__dirname, `../node_modules/mcra-user-preferences`);
     const mcra_user_gen_templates_js = `${mcraUserPreferences}/user_gen_templates.js`;
     const userGenTemplatesAlreadyExists = fs.existsSync(mcra_user_gen_templates_js);
 
     /* LOGIC */
         if (fs.existsSync(mcraUserPreferences) === false) {
             fs.mkdirSync(mcraUserPreferences);
-            fs.writeFileSync(adaptJson, ``, 'utf8');
         };
 
         function pathToCopyTemplates() {
