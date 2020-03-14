@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 const { argv } = require('process');
 
-const { createBoilerplate, gen, imp } = require('./commands');
+const { createBoilerplate, gen, imp, adapt } = require('./commands');
 
 const arguments = argv.splice(2);
-
-console.log(arguments[0]);
 
 switch (arguments[0]) {
     case 'gen':
@@ -14,6 +12,10 @@ switch (arguments[0]) {
 
     case 'imp':
         imp(arguments);
+        break;
+    
+    case 'adapt':
+        adapt(arguments);
         break;
 
     default:

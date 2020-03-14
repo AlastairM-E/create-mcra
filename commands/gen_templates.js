@@ -7,7 +7,7 @@ export default {
 };`;
 };
 
-function reactTemplateFile(nameOfModule) {
+function reactFunctionalTemplateFile(nameOfModule) {
     return `/*IMPORTS*/
 import React from 'react'; 
     
@@ -18,6 +18,24 @@ function ${nameOfModule}() {
     return (
     
     ); 
+    
+};
+
+export default ${nameOfModule};`;
+};
+
+function reactClassTemplateFile(nameOfModule) {
+    return `/*IMPORTS*/
+import React, { Component, } from 'react'; 
+    
+/*COMPONENT*/
+class ${nameOfModule} extends Component {
+    
+    render() {
+        return (
+    
+        ); 
+    };
     
 };
 
@@ -37,7 +55,8 @@ test('', () => {
 
 module.exports = {
     initialIndexJsFile,
-    reactTemplateFile,
+    reactFunctionalTemplateFile,
+    reactClassTemplateFile,
     jestTestingTemplateFile
 };
 

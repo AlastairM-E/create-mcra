@@ -6,7 +6,7 @@ function createBoilerplate(arguments) {
     console.log(`
         The wait is finally over, please:
 
-        cd ${arguments[0]}
+        cd ${arguments.split(' ')[0]}
         npm/yarn start
     `);
 };
