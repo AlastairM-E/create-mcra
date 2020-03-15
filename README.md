@@ -133,6 +133,7 @@ The will add a file in your directory called user_gen_templates.js (the followin
 ```
 
 This will also cause a question to pop up in your terminal (please don't answer the question just yet):
+    
     ? Do you to save the changes :  (Y/n) 
 
 ### File content
