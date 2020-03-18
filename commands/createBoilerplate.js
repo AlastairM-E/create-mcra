@@ -4,37 +4,62 @@ const path = require('path');
 
 function createBoilerplate(arguments) {
 
+    //impJson : path to imp.json in nodemodules.
+    //cli : default --> create-ract-app
+    //additional packages --> null by default to act as a check later on.
+
     const impJson = path.join(__dirname, `../node_modules/mcra-user-preferences/imp.json`);
     let cli = 'create-react-app';
     let additionalPackages = null;
+
+    //check if impJson file exists in the node modules folder, read the file and plase it via json
+    //if make the cli be equal to the content of the imp json value --> have ht ecli be equal to the cli.
+    //have th addiotnal packages be equal to the packages.
     
     if (fs.existsSync(impJson)){
-        const impJsonComponent = JSON.parse(fs.readFileSync(impJson, 'utf8'));
+        const impJsonValue = JSON.parse(fs.readFileSync(impJson, 'utf8'));
 
-        cli = impJsonComponent.cli;
-        additionalPackages = impJsonComponent.packages;
+        cli = impJsonValue.cli;
+        additionalPackages = impJsonValue.packages;
     };
 
+    //Exec the yarn --version command to check if their is an error.
+    //if err is false, use yarn, else npm. --> defaults via npx.
+    //log a message to show which cli is being executed.
+
+
     exec('yarn --version', (err) => {
-        let packageManager = err ? 'yarn' : 'npm';
+        const packageManager = err ? 'npm' : 'yarn';
 
         console.log(`${cli} magic: this will take a couple of minutes so relax.`);
+
+    //check via the package manager --> 
+    //if yarn package + spilt the cli by nothing, remove the - at the 7th index item and join by nothing, to create : create <PackageName>
+    //if npm --> cli is equal to npx <cli>
 
         switch (packageManager) {
             case 'yarn':
                 cli = `${packageManager} ${cli.split('').map((item, index) => index === 6 ? ' ' : item).join('')}`;
                 break;
         
-            default:
+            case 'npm':
                 cli = `npx ${cli}`;
                 break;
         };
+
+    //execute the cli stuff with any arguments supplied for the folder and stuff.
+    //dev isntallition will be if the package Manager is yarn return 'add -dev' else (if npm) 'install --save-dev'.
+    // The log out a message and installl the additonal packages if the additionaplkaces is falsely (null).
 
         execSync(`${cli} ${arguments}`);
 
         const devInstallation = packageManager === 'yarn' ? 'add --dev' : 'install --save-dev';
 
+        console.log(`Any additional packages from mcra imp are being installed`)
+
         additionalPackages ? execSync(`${packageManager} ${devInstallation} ${additionalPackages.join(' ')}`) : null;
+
+        //log out when the package is read with the appriopate file name and cd to the packageManger value.
 
         console.log(`
             The wait is finally over, please:
@@ -45,11 +70,6 @@ function createBoilerplate(arguments) {
 
     });
 
-    //SHould I use inquirer for th e automatic cli or something different.
-    //problemable use auto yarn since I am mainly the only person who will be using this tool
-    
-
-    
 };
 
 module.exports = createBoilerplate;
