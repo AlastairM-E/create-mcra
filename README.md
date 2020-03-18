@@ -8,6 +8,7 @@ Extending the tools for the create-react-app project in order to create a custom
     * [Creating a project](#creating-a-project).
     * [mcra gen : Generating components](#mcra-gen--generating-components).
     * [mcra adapt : customizing your mcra gen boilerplate](#mcra-adapt--customizing-your-boilerplate).
+    * [mcra imp : cutomizing your react cli](#mcra-imp--cutomizing-your-react-cli).
     * [Default mcra gen Boilerplate](#default-boilerplate).
 * [Feature-requests](#feature-requests).
 * [Issues](#issues).
@@ -268,6 +269,36 @@ function Navbar() {
 
 export default Navbar;`;
 ```
+
+## mcra imp : cutomizing your react cli
+
+### Implementing packages
+
+This will add custom packages to your react cli or change the react cli entirely so that your have custom starting point whcih suits your needs.
+
+To implement the packages into your react cli run the folloing:
+
+    mcra imp <your-Package-1> <add-another-Package-2> <you-get-the-picture-Package-3>
+
+This will mean that when you run ``` npx create-mcra <your-folder-name>``` or ``` yarn create mcra <your-folder-name> ``` or even ``` mcra <your-folder-name-again> ``` you will install those extra packages as well as dev dependencies (in the exmaple above, when you ran the comands, you would get the npm/yarn packages **your-Package-1 add-another-Package-2 you-get-the-picture-Package-3** to your dev dependecies in your package.json).
+
+### Implementing react clis
+
+If you would like a completely different cli than create-react-app, for example your own personal react boilerplate cli that is in a npm/yarn package, then you can implement that cli using the following (**order of the first 3 keywords DO matter**):
+
+    mcra imp -cli <your-favourite-cli>
+
+This will mean that when you run ``` npx create-mcra <your-folder-name>``` or ``` yarn create mcra <your-folder-name> ``` or even ``` mcra <your-folder-name-again> ```, you will get your-favourite-cli producing the boilerplate, like the create-react-app cli produces it's boilterplate.
+
+### Removing said implementations
+
+You can remove the custom packages you set it you don't want them by running the following (**order of the first 3 keywords DO matter again**):
+
+    mcra imp -rm <your-Package-1> <add-another-Package-2> <you-get-the-picture-Package-3>
+
+This will remove **packages your-Package-1 add-another-Package-2 you-get-the-picture-Package-3** from the react cli, so when you the run ``` npx create-mcra <your-folder-name>``` or ``` yarn create mcra <your-folder-name> ``` or even ``` mcra <your-folder-name-again> ``` you will not have those packages installed in your dev dependecies as part of your boilerplate code.
+
+**Note** : if you impelement any clis/packages via the methods above, currently if you update this package will lose all user preferences. If you like to keep them, them, please find this package within your complete, look for the __node_modules__ and the module __mcra-user-preferences__ whcih should contain a __imp.json__ file. Copy the content of that file and make the __imp.json__ file in the __mcra-user-preferences__ (you may have to make as well) to restore you preferences. Sorry about the really annoying process.
 
 ## Default Boilerplate
 

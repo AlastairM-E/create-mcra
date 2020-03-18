@@ -36,6 +36,21 @@ function imp(arguments) {
             const newJsonCli = JSON.stringify({ ...newCli, packages });
             fs.writeFileSync(impJson, newJsonCli);
             break;
+
+        case '-rm':
+        const filterPackages = packages.filter(package => {
+            return nameOfPackages.find(item => {
+                if (item === package) {
+                    console.log(`removed ${package}`)
+                    return true;
+                } else {
+                    return false;
+                };
+            }) === undefined;
+        });
+        const filterJsonPackages = JSON.stringify({ cli, packages : filterPackages });
+        fs.writeFileSync(impJson, filterJsonPackages);
+        break;
     
         default:
             nameOfPackages.push(flag);
@@ -43,6 +58,7 @@ function imp(arguments) {
             const newPackages = { packages : [...packageSet] };
             const newJsonPackages = JSON.stringify({ cli, ...newPackages });
             fs.writeFileSync(impJson, newJsonPackages);
+            console.log(`added ${nameOfPackages.join(' ')}`)
             break;
     }
 };
