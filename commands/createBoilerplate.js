@@ -53,11 +53,11 @@ function createBoilerplate(arguments) {
 
         execSync(`${cli} ${arguments}`);
 
-        const devInstallation = packageManager === 'yarn' ? 'add --dev' : 'install --save-dev';
+        const devInstallation = packageManager === 'yarn' ? 'add ' : 'install';
 
-        console.log(`Any additional packages from mcra imp are being installed`)
+        console.log(`Any additional packages from mcra imp are being installed`);
 
-        additionalPackages ? execSync(`${packageManager} ${devInstallation} ${additionalPackages.join(' ')}`) : null;
+        additionalPackages ? execSync(`${packageManager} ${devInstallation} ${additionalPackages.join(' ')}`, { cwd : curr}) : null;
 
         //log out when the package is read with the appriopate file name and cd to the packageManger value.
 

@@ -1,7 +1,7 @@
 function initialIndexJsFile (nameOfModule) {
-    return `import ${nameOfModule} from '${nameOfModule}/${nameOfModule}.jsx';
+    return `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx';
         
-export default {
+export {
     ${nameOfModule},
 
 };`;
