@@ -21,7 +21,6 @@
     "latest": " yarn unlink & yarn link"
   },
   "dependencies": {
-    "axios": "^0.19.2",
     "create-rboil-utils": "^1.2.0",
     "create-react-app": "^3.4.0",
     "inquirer": "^7.1.0"

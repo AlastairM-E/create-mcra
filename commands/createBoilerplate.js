@@ -31,33 +31,33 @@ function createBoilerplate(arguments) {
     exec('yarn --version', (err) => {
         const packageManager = err ? 'npm' : 'yarn';
 
-        console.log(`${cli} magic: this will take a couple of minutes so relax.`);
+        // console.log(`${cli} magic: this will take a couple of minutes so relax.`);
 
     //check via the package manager --> 
     //if yarn package + spilt the cli by nothing, remove the - at the 7th index item and join by nothing, to create : create <PackageName>
     //if npm --> cli is equal to npx <cli>
 
-        switch (packageManager) {
-            case 'yarn':
-                cli = `${packageManager} ${cli.split('').map((item, index) => index === 6 ? ' ' : item).join('')}`;
-                break;
+        // switch (packageManager) {
+        //     case 'yarn':
+        //         cli = `${packageManager} ${cli.split('').map((item, index) => index === 6 ? ' ' : item).join('')}`;
+        //         break;
         
-            case 'npm':
-                cli = `npx ${cli}`;
-                break;
-        };
+        //     case 'npm':
+        //         cli = `npx ${cli}`;
+        //         break;
+        // };
 
     //execute the cli stuff with any arguments supplied for the folder and stuff.
     //dev isntallition will be if the package Manager is yarn return 'add -dev' else (if npm) 'install --save-dev'.
     // The log out a message and installl the additonal packages if the additionaplkaces is falsely (null).
 
-        execSync(`${cli} ${arguments}`);
+        // execSync(`${cli} ${arguments}`);
 
         const devInstallation = packageManager === 'yarn' ? 'add ' : 'install';
 
         console.log(`Any additional packages from mcra imp are being installed`);
 
-        additionalPackages ? execSync(`${packageManager} ${devInstallation} ${additionalPackages.join(' ')}`, { cwd : curr}) : null;
+        additionalPackages ? execSync(`${packageManager} ${devInstallation} ${additionalPackages.join(' ')}`) : null;
 
         //log out when the package is read with the appriopate file name and cd to the packageManger value.
 
