@@ -1,12 +1,8 @@
 /* IMPORTS */
-const fs = require('fs');
-const path = require('path');
-const process = require('process');
-
 const inquirer = require('inquirer');
 
 /* ADAPT */
-function adapt(arguments) {
+function adapt(): void {
     /* VARIABLES */
     const mcraUserPreferences = path.join(__dirname, `../node_modules/mcra-user-preferences`);
     const mcra_user_gen_templates_js = `${mcraUserPreferences}/user_gen_templates.js`;
@@ -22,8 +18,7 @@ function adapt(arguments) {
                 return mcra_user_gen_templates_js;
             } else {
                 return path.join(__dirname, `./gen_templates.js`);
-            }
-            
+            };
         };
         
         fs.copyFileSync(
@@ -58,6 +53,8 @@ function adapt(arguments) {
             fs.unlinkSync(`${process.cwd()}/user_gen_templates.js`);
             console.log('preferences have been completed');
         });
+
+        return null;
 };
 
 /* EXPORTS*/

@@ -1,7 +1,5 @@
-const path = require('path');
-const fs = require('fs');
 
-function imp(arguments) {
+function imp(arguments: string[]) {
     //First of all --> create a imp.txt.
     // take the arguments supplied to the function 
     //wite it to the imp.txt file.

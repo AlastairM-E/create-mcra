@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-/* IMPORTS */
-const process = require('process');
-const fs = require('fs');
-
 function dynamicTemplateRequire() {
     try {
         return require('mcra-user-preferences/user_gen_templates')

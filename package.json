@@ -1,11 +1,11 @@
 {
   "name": "create-mcra",
   "version": "0.1.8",
-  "main": "index.js",
+  "main": "./commands/mcra.js",
   "license": "MIT",
   "bin": {
-    "mcra": "index.js",
-    "create-mcra": "index.js"
+    "mcra": "./commands/mcra.js",
+    "create-mcra": "./commands/mcra.js"
   },
   "description": "Extending the tools for the create-react-app project in order to create a custom boilerplate framework.",
   "keywords": [
@@ -18,12 +18,14 @@
     "url": "https://github.com/AlastairM-E/create-mcra"
   },
   "scripts": {
-    "latest": " yarn unlink & yarn link"
+    "build": "tsc"
   },
   "dependencies": {
+    "@types/node": "^13.9.5",
     "create-rboil-utils": "^1.2.0",
     "create-react-app": "^3.4.0",
-    "inquirer": "^7.1.0"
+    "inquirer": "^7.1.0",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "jest": "^25.2.3"

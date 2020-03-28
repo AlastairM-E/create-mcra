@@ -1,7 +1,17 @@
 #!/usr/bin/env node
-const { argv } = require('process');
+export {};
 
-const { createBoilerplate, gen, imp, adapt } = require('./commands');
+const { argv } = require('process');
+const path = require('path');
+const fs = require('fs');
+const process = require('process');
+
+const createBoilerplate = require('./createBoilerplate');
+const gen = require('./gen');
+const imp = require('./imp');
+const adapt = require('./adapt');
+
+
 
 const arguments = argv.splice(2);
 
