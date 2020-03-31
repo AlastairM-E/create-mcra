@@ -1,8 +1,10 @@
+export {};
+
 const { exec, execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-function createBoilerplate(arguments) {
+function createBoilerplate() {
 
     //impJson : path to imp.json in nodemodules.
     //cli : default --> create-ract-app
@@ -10,7 +12,7 @@ function createBoilerplate(arguments) {
 
     const impJson = path.join(__dirname, `../node_modules/mcra-user-preferences/imp.json`);
     let cli = 'create-react-app';
-    let additionalPackages = null;
+    let additionalPackages: void | string[] = null;
 
     //check if impJson file exists in the node modules folder, read the file and plase it via json
     //if make the cli be equal to the content of the imp json value --> have ht ecli be equal to the cli.
@@ -28,7 +30,7 @@ function createBoilerplate(arguments) {
     //log a message to show which cli is being executed.
 
 
-    exec('yarn --version', (err) => {
+    exec('yarn --version', (args: string, err: boolean | void) => {
         const packageManager = err ? 'npm' : 'yarn';
 
         console.log(`${cli} magic: this will take a couple of minutes so relax.`);
@@ -51,7 +53,7 @@ function createBoilerplate(arguments) {
     //dev isntallition will be if the package Manager is yarn return 'add -dev' else (if npm) 'install --save-dev'.
     // The log out a message and installl the additonal packages if the additionaplkaces is falsely (null).
 
-        execSync(`${cli} ${arguments}`);
+        execSync(`${cli} ${args}`);
 
         const devInstallation = packageManager === 'yarn' ? 'add ' : 'install';
 
@@ -64,7 +66,7 @@ function createBoilerplate(arguments) {
         console.log(`
             The wait is finally over, please:
 
-            cd ${arguments.split(' ')[0]}
+            cd ${args.split(' ')[0]}
             ${packageManager} start
         `);
 

@@ -1,4 +1,4 @@
-function initialIndexJsFile (nameOfModule) {
+function initialIndexJsFile (nameOfModule: string) {
     return `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx';
         
 export {
@@ -7,7 +7,7 @@ export {
 };`;
 };
 
-function reactFunctionalTemplateFile(nameOfModule) {
+function reactFunctionalTemplateFile(nameOfModule: string) {
     return `/*IMPORTS*/
 import React from 'react'; 
     
@@ -24,7 +24,7 @@ function ${nameOfModule}() {
 export default ${nameOfModule};`;
 };
 
-function reactClassTemplateFile(nameOfModule) {
+function reactClassTemplateFile(nameOfModule: string) {
     return `/*IMPORTS*/
 import React, { Component, } from 'react'; 
     
@@ -42,7 +42,7 @@ class ${nameOfModule} extends Component {
 export default ${nameOfModule};`;
 };
 
-function jestTestingTemplateFile(nameOfModule) {
+function jestTestingTemplateFile(nameOfModule: string) {
     return `/*IMPORTS*/
 import React from 'react';  
 import ${nameOfModule} from './${nameOfModule}.jsx;

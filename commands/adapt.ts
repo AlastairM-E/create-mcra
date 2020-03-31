@@ -1,4 +1,10 @@
 /* IMPORTS */
+export {};
+
+const fs = require('fs');
+const path = require('path');
+const process = require('process');
+
 const inquirer = require('inquirer');
 
 /* ADAPT */
@@ -32,7 +38,7 @@ function adapt(): void {
             message: 'Do you to save the changes : '
         };
 
-        inquirer.prompt(question).then(answer => {
+        inquirer.prompt(question).then((answer: { confirmChangesToBoilerplate: boolean }) => {
             const confirmedChanges = answer.confirmChangesToBoilerplate;
             const newTemplateFileContent = fs.readFileSync(`${process.cwd()}/user_gen_templates.js`, 'utf8');
 

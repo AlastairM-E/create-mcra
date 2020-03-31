@@ -6,7 +6,8 @@
         "noEmitOnError": true,
         "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true
+        "noFallthroughCasesInSwitch": true,
+        "downlevelIteration": true
     },
     "include": [
         "./commands/**/*"

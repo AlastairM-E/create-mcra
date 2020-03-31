@@ -1,4 +1,10 @@
 #!/usr/bin/env node
+export {};
+
+/* IMPORTS */
+const process = require('process');
+const fs = require('fs');
+
 function dynamicTemplateRequire() {
     try {
         return require('mcra-user-preferences/user_gen_templates')
@@ -15,10 +21,10 @@ const {
 } = dynamicTemplateRequire();
 const { readSubFilesFrom, appendToFileLines } =  require('create-rboil-utils');
 
-function gen(arguments) {
+function gen(args: string): void {
     /* VARIABLES */
-    const nameOfModule = arguments[1];
-    const flagForComponentType = arguments[2];
+    const nameOfModule = args[1];
+    const flagForComponentType = args[2];
     const currentDirectory  = process.cwd();
     const src = readSubFilesFrom(`${currentDirectory}/src`);
     const components = `${currentDirectory}/src/components`;
@@ -27,7 +33,7 @@ function gen(arguments) {
     /* LOGIC */
 
     //Flag logic
-    function templateReactComponent(flag, moduleName) {
+    function templateReactComponent(flag: string, moduleName: string) {
         switch (flag) {
             case '-c':
                 return reactClassTemplateFile(moduleName);
@@ -40,9 +46,9 @@ function gen(arguments) {
     } ;
 
     //Adding components dir
-    const hasComponentFolderBeenAdded = src.filter(file => {
+    const hasComponentFolderBeenAdded = src.filter((file: { directory : string }) => {
         const folder = 'object';
-        if (typeof(file) === folder && file.directory === 'components') {
+        if (typeof(file) === folder) {
             return true;
         };
         return false;
@@ -66,7 +72,7 @@ function gen(arguments) {
     //Adding index.js
     const componentsDirFiles = readSubFilesFrom(components);
     const numberOfModules = componentsDirFiles.length - 1;
-    const hasIndexJsFileBeenAdded = componentsDirFiles.filter(file => file === 'index.js');
+    const hasIndexJsFileBeenAdded = componentsDirFiles.filter((file: string) => file === 'index.js');
 
     if (hasIndexJsFileBeenAdded.length === 0) {
         fs.writeFileSync(`${components}/index.js`, initialIndexJsFile(nameOfModule));

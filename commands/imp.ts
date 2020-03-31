@@ -1,7 +1,11 @@
+export {};
 
-function imp(arguments: string[]) {
+const path = require('path');
+const fs = require('fs');
+
+function imp(args: string[]) {
     //First of all --> create a imp.txt.
-    // take the arguments supplied to the function 
+    // take the args supplied to the function 
     //wite it to the imp.txt file.
     //create a flag if it is the cli or package to be installed. (-cli | default to an aditional package).
     //make a switch case.
@@ -9,21 +13,23 @@ function imp(arguments: string[]) {
     //write the object { "cli" : "xyz"}; to the imp.json.
     //write the object { "cli" : "xyz", "imp" : ["a", "b", "c"]}
     
-    const [command, flag, ...nameOfPackages] = arguments;
+    const [command, flag, ...nameOfPackages] = args;
     const mcraUserPreferences = path.join(__dirname, `../node_modules/mcra-user-preferences`);
     const impJson = `${mcraUserPreferences}/imp.json`;
+    
+    const mcra_User_Preferences_Exists = fs.existsSync(mcraUserPreferences) === false;
+    const imp_Json_File_Exists = fs.existsSync(impJson) === false;
 
-    if (fs.existsSync(mcraUserPreferences) === false) {
+    if (mcra_User_Preferences_Exists) {
         fs.mkdirSync(mcraUserPreferences);
     };
 
-    if (fs.existsSync(impJson) === false) {
+    if (imp_Json_File_Exists) {
         fs.writeFileSync(impJson, '{ "cli" : "", "packages" : [] }');
     };
     
     const impJsonContent = fs.existsSync(impJson) ? fs.readFileSync(impJson, 'utf8') : null;
     const { cli, packages } = JSON.parse(impJsonContent);
-
     
     //what makes sense:
     //- is to have a single 
@@ -36,10 +42,10 @@ function imp(arguments: string[]) {
             break;
 
         case '-rm':
-        const filterPackages = packages.filter(package => {
+        const filterPackages = packages.filter((nodePackage: string) => {
             return nameOfPackages.find(item => {
-                if (item === package) {
-                    console.log(`removed ${package}`)
+                if (item === nodePackage) {
+                    console.log(`removed ${nodePackage}`)
                     return true;
                 } else {
                     return false;
@@ -52,18 +58,16 @@ function imp(arguments: string[]) {
     
         default:
             nameOfPackages.push(flag);
+
             const packageSet = new Set([...nameOfPackages, ...packages]);
             const newPackages = { packages : [...packageSet] };
             const newJsonPackages = JSON.stringify({ cli, ...newPackages });
+
             fs.writeFileSync(impJson, newJsonPackages);
+
             console.log(`added ${nameOfPackages.join(' ')}`)
             break;
-    }
+    };
 };
-
-  
-
-
-    //fs.writeFileSync(`${mcraUserPreferences}/imp.json`);
 
 module.exports = imp;

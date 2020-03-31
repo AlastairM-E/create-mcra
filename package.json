@@ -1,11 +1,11 @@
 {
   "name": "create-mcra",
   "version": "0.1.8",
-  "main": "./commands/mcra.js",
+  "main": "./build/mcra.js",
   "license": "MIT",
   "bin": {
-    "mcra": "./commands/mcra.js",
-    "create-mcra": "./commands/mcra.js"
+    "mcra": "./build/mcra.js",
+    "create-mcra": "./build/mcra.js"
   },
   "description": "Extending the tools for the create-react-app project in order to create a custom boilerplate framework.",
   "keywords": [

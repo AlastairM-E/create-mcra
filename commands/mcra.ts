@@ -2,9 +2,6 @@
 export {};
 
 const { argv } = require('process');
-const path = require('path');
-const fs = require('fs');
-const process = require('process');
 
 const createBoilerplate = require('./createBoilerplate');
 const gen = require('./gen');
@@ -13,22 +10,22 @@ const adapt = require('./adapt');
 
 
 
-const arguments = argv.splice(2);
+const args = argv.splice(2);
 
-switch (arguments[0]) {
+switch (args[0]) {
     case 'gen':
-        gen(arguments);
+        gen(args);
         break;
 
     case 'imp':
-        imp(arguments);
+        imp(args);
         break;
     
     case 'adapt':
-        adapt(arguments);
+        adapt(args);
         break;
 
     default:
-        createBoilerplate(arguments.join(' '));
+        createBoilerplate(args.join(' '));
         break;
 };
