@@ -1,7 +1,7 @@
 {
   "name": "create-mcra",
   "version": "0.1.8",
-  "main": "./build/mcra.js",
+  "main": "index.js",
   "license": "MIT",
   "bin": {
     "mcra": "./build/mcra.js",
@@ -18,16 +18,27 @@
     "url": "https://github.com/AlastairM-E/create-mcra"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "test": "tsc && jest --watchAll ./tests"
   },
   "dependencies": {
+    "@babel/core": "^7.9.0",
+    "@types/jest": "^25.2.1",
     "@types/node": "^13.9.5",
-    "create-rboil-utils": "^1.2.0",
+    "create-rboil-utils": "^1.2.7",
     "create-react-app": "^3.4.0",
     "inquirer": "^7.1.0",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.9.0",
+    "@typescript-eslint/eslint-plugin": "^2.28.0",
+    "@typescript-eslint/parser": "^2.28.0",
+    "babel-jest": "^25.3.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-jest": "^23.8.2",
     "jest": "^25.2.3"
   }
 }

@@ -1,20 +1,20 @@
-function initialIndexJsFile (nameOfModule: string) {
-    return `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx';
+function initialIndexJsFile(nameOfModule: string) {
+  return `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx';
         
 export {
     ${nameOfModule},
 
 };`;
-};
+}
 
 function reactFunctionalTemplateFile(nameOfModule: string) {
-    return `/*IMPORTS*/
+  return `/* IMPORTS */
 import React from 'react'; 
     
-/*COMPONENT*/
+/* COMPONENT */
 function ${nameOfModule}() {
     
-    /*RENDER*/
+    /* RENDER */
     return (
     
     ); 
@@ -22,10 +22,10 @@ function ${nameOfModule}() {
 };
 
 export default ${nameOfModule};`;
-};
+}
 
 function reactClassTemplateFile(nameOfModule: string) {
-    return `/*IMPORTS*/
+  return `/*IMPORTS*/
 import React, { Component, } from 'react'; 
     
 /*COMPONENT*/
@@ -40,24 +40,23 @@ class ${nameOfModule} extends Component {
 };
 
 export default ${nameOfModule};`;
-};
+}
 
 function jestTestingTemplateFile(nameOfModule: string) {
-    return `/*IMPORTS*/
-import React from 'react';  
-import ${nameOfModule} from './${nameOfModule}.jsx;
-
-/*TESTS*/
+  return `/* IMPORTS */
+import React from 'react';
+import ${nameOfModule} from './${nameOfModule}.jsx';
+  
+/* TESTS */
 test('', () => {
-
-});`;
-};
+  
+});
+`;
+}
 
 module.exports = {
-    initialIndexJsFile,
-    reactFunctionalTemplateFile,
-    reactClassTemplateFile,
-    jestTestingTemplateFile
+  initialIndexJsFile,
+  reactFunctionalTemplateFile,
+  reactClassTemplateFile,
+  jestTestingTemplateFile,
 };
-
-
