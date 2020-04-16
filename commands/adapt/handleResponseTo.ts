@@ -14,7 +14,7 @@ function handleResponseTo(
   { userGenTemplatesAlreadyExists, mcraUserGenTemplateJs }: filePaths,
 ): void {
   const confirmedChanges = answer.confirmChangesToBoilerplate;
-  const newTemplateFileContent = fs.readFileSync(`${process.cwd()}/user_gen_templates.js`, 'utf8');
+  const newTemplateFileContent = fs.readFileSync(`${process.cwd()}/user_gen_templates.ts`, 'utf8');
 
   if (confirmedChanges) {
     if (userGenTemplatesAlreadyExists) {
@@ -24,13 +24,13 @@ function handleResponseTo(
       );
     } else {
       fs.copyFileSync(
-        `${process.cwd()}/user_gen_templates.js`,
+        `${process.cwd()}/user_gen_templates.ts`,
         mcraUserGenTemplateJs,
       );
     }
   }
 
-  fs.unlinkSync(`${process.cwd()}/user_gen_templates.js`);
+  fs.unlinkSync(`${process.cwd()}/user_gen_templates.ts`);
   console.log('preferences have been completed');
 }
 
