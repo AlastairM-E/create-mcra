@@ -12,8 +12,8 @@ const { handleResponseTo } = require('./handleResponseTo');
 function adapt(): void {
   /* VARIABLES */
   const mcraUserPreferences = path.join(__dirname, 'mcra-user-preferences');
-  const mcraUserGenTemplateJs = `${mcraUserPreferences}/user_gen_templates.js`;
-  const userGenTemplatesAlreadyExists = fs.existsSync(mcraUserGenTemplateJs);
+  const mcraUserGenTemplateTs = `${mcraUserPreferences}/user_gen_templates.ts`;
+  const userGenTemplatesAlreadyExists = fs.existsSync(mcraUserGenTemplateTs);
 
   /* LOGIC */
   if (fs.existsSync(mcraUserPreferences) === false) {
@@ -22,11 +22,10 @@ function adapt(): void {
 
   function pathToCopyTemplates() {
     if (userGenTemplatesAlreadyExists) {
-      return mcraUserGenTemplateJs;
+      return mcraUserGenTemplateTs;
     }
     return path.join(__dirname, '../../commands/gen_templates.ts');
   }
-  console.log({ mcraUserGenTemplateJs, pathToCopyTemplates: pathToCopyTemplates() });
   fs.copyFileSync(
     pathToCopyTemplates(),
     `${process.cwd()}/user_gen_templates.ts`,
@@ -39,7 +38,7 @@ function adapt(): void {
   };
 
   inquirer.prompt(question).then((answer: { confirmChangesToBoilerplate: boolean }) => {
-    const filePaths = { userGenTemplatesAlreadyExists, mcraUserGenTemplateJs };
+    const filePaths = { userGenTemplatesAlreadyExists, mcraUserGenTemplateTs };
     handleResponseTo(answer, filePaths);
   });
 

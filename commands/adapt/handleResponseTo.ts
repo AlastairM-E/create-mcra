@@ -5,29 +5,15 @@ interface answer {
 }
 
 interface filePaths {
-    userGenTemplatesAlreadyExists: boolean;
-    mcraUserGenTemplateJs: string;
+    mcraUserGenTemplateTs: string;
 }
 
-function handleResponseTo(
-  answer: answer,
-  { userGenTemplatesAlreadyExists, mcraUserGenTemplateJs }: filePaths,
-): void {
+function handleResponseTo(answer: answer, { mcraUserGenTemplateTs }: filePaths): void {
   const confirmedChanges = answer.confirmChangesToBoilerplate;
   const newTemplateFileContent = fs.readFileSync(`${process.cwd()}/user_gen_templates.ts`, 'utf8');
 
   if (confirmedChanges) {
-    if (userGenTemplatesAlreadyExists) {
-      fs.writeFileSync(
-        mcraUserGenTemplateJs,
-        newTemplateFileContent,
-      );
-    } else {
-      fs.copyFileSync(
-        `${process.cwd()}/user_gen_templates.ts`,
-        mcraUserGenTemplateJs,
-      );
-    }
+    fs.writeFileSync(mcraUserGenTemplateTs, newTemplateFileContent);
   }
 
   fs.unlinkSync(`${process.cwd()}/user_gen_templates.ts`);
