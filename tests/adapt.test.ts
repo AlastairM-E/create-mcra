@@ -5,24 +5,25 @@ const { handleResponseTo } = require('../build/adapt/handleResponseTo');
 
 const mcraUserGenTemplateTs = '/Users/alastair/Documents/meta-cra/build/adapt/mcra-user-preferences/user_gen_templates.ts';
 
-// afterEach(() => {
-//   // check whether the user_gen_templates.ts file exists
-//   // If it does, then unlink (default else, don't do anything).
+function cleanUpAdaptCommand() {
+  if (fs.existsSync(mcraUserGenTemplateTs)) {
+    fs.unlinkSync(mcraUserGenTemplateTs);
+  }
+  fs.rmdirSync('./build/adapt/mcra-user-preferences');
+}
 
-//   if (fs.existsSync('./build/adapt/mcra-user-preferences/user_gen_templates.ts')) {
-//     fs.unlinkSync('./build/adapt/mcra-user-preferences/user_gen_templates.ts');
-//   }
-//   fs.rmdirSync('./build/adapt/mcra-user-preferences');
-// });
+afterEach(() => {
+  // check whether the user_gen_templates.ts file exists
+  // If it does, then unlink (default else, don't do anything).
+  cleanUpAdaptCommand();
+});
 
 test('testing mcra adapt works at the beginning and the yes option.', () => {
   // Abstract the test into a function so that I can test the adapt
   // command works multiple times and does jsut perform well one time only.
-
-  function checkAdaptEditingBoilerplateWorks(fixturePath: string): void {
-    // Running the test command.
+  function checkInitSetup() {
     adapt();
-    // see if the user_gen_templates exists.
+
     const userGenTemplatesTsHasBeenCreated = fs.existsSync('./user_gen_templates.ts');
     expect(userGenTemplatesTsHasBeenCreated).toBe(true);
 
@@ -35,6 +36,15 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
     const commandGenTemplate = fs.readFileSync('./commands/gen_templates.ts', 'utf8');
 
     expect(userGenTemplateTextContent).toStrictEqual(commandGenTemplate);
+    cleanUpAdaptCommand();
+  }
+
+  function checkAdaptEditingBoilerplateWorks(fixturePath: string): void {
+    // Running the test command.
+    adapt();
+
+    const userGenTemplateTextContent = fs.readFileSync('./user_gen_templates.ts', 'utf8');
+    // see if the user_gen_templates exists.
     // handleResponseTo run with function then check the file checks
     // exist via readFileSync & write the data from the fixtures.
     const adaptCliAnswer = { confirmChangesToBoilerplate: true };
@@ -62,9 +72,10 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
   }
 
   // Repeating multiple times to check it is just succeding one time only.
+  checkInitSetup();
   checkAdaptEditingBoilerplateWorks('fixtures/adapt/updated_user_gen_template.ts');
-  // checkAdaptEditingBoilerplateWorks('fixtures/adapt/another_updated_user_gen_template.ts');
-  // checkAdaptEditingBoilerplateWorks('fixtures/adapt/updated_user_gen_template.ts');
+  checkAdaptEditingBoilerplateWorks('fixtures/adapt/another_updated_user_gen_template.ts');
+  checkAdaptEditingBoilerplateWorks('fixtures/adapt/updated_user_gen_template.ts');
 
 
   adapt();
