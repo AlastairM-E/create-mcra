@@ -5,6 +5,9 @@ const { handleResponseTo } = require('../build/adapt/handleResponseTo');
 
 const mcraUserGenTemplateTs = '/Users/alastair/Documents/meta-cra/build/adapt/mcra-user-preferences/user_gen_templates.ts';
 
+/* CLEAN UP ADAPT COMMAND */
+// check whether the user_gen_templates.ts file exists
+// If it does, then unlink (default else, don't do anything).
 function cleanUpAdaptCommand() {
   if (fs.existsSync(mcraUserGenTemplateTs)) {
     fs.unlinkSync(mcraUserGenTemplateTs);
@@ -13,25 +16,24 @@ function cleanUpAdaptCommand() {
 }
 
 afterEach(() => {
-  // check whether the user_gen_templates.ts file exists
-  // If it does, then unlink (default else, don't do anything).
   cleanUpAdaptCommand();
 });
 
+/* ADAPT COMMAND WHICH EDITS THE FILE */
 test('testing mcra adapt works at the beginning and the yes option.', () => {
-  // Abstract the test into a function so that I can test the adapt
-  // command works multiple times and does jsut perform well one time only.
+  /* CHECK INITIAL SETUP OF ADAPT COMMAND */
+  // check whether mcra-user-preferences dir exists.
+  // check whether the user_gen_template.ts exists.
+  // check whether files have the same text content.
   function checkInitSetup() {
     adapt();
 
     const userGenTemplatesTsHasBeenCreated = fs.existsSync('./user_gen_templates.ts');
     expect(userGenTemplatesTsHasBeenCreated).toBe(true);
 
-    // check whether mcra-user-preferences file exists.
     const mcraUserPreferencesDirHasBeenCreated = fs.existsSync('./build/adapt/mcra-user-preferences');
     expect(mcraUserPreferencesDirHasBeenCreated).toBe(true);
 
-    // check whether files have the same text content.
     const userGenTemplateTextContent = fs.readFileSync('./user_gen_templates.ts', 'utf8');
     const commandGenTemplate = fs.readFileSync('./commands/gen_templates.ts', 'utf8');
 
@@ -39,14 +41,20 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
     cleanUpAdaptCommand();
   }
 
+  /* CHECKING ADAPT EDITS THE BOILERPLATE CORRECTLY */
+  // Abstract the test into a function so that I can test the adapt
+  // command works multiple times and does jsut perform well one time only.
+  // Running the test command.
+  // see if the user_gen_templates exists.
+  // handleResponseTo run with function then check the file checks
+  // exist via readFileSync & write the data from the fixtures.
+  // Check that the file exists in the mcra-user-preferences fodler in the build/adapt folder.
+  // Check the content is equal to the new content of the user gen template
+  // and not the only template content
   function checkAdaptEditingBoilerplateWorks(fixturePath: string): void {
-    // Running the test command.
     adapt();
 
     const userGenTemplateTextContent = fs.readFileSync('./user_gen_templates.ts', 'utf8');
-    // see if the user_gen_templates exists.
-    // handleResponseTo run with function then check the file checks
-    // exist via readFileSync & write the data from the fixtures.
     const adaptCliAnswer = { confirmChangesToBoilerplate: true };
     const filePaths = { mcraUserGenTemplateTs };
     const fixturesGenTemplate = fs.readFileSync(path.join(__dirname, fixturePath), 'utf8');
@@ -57,7 +65,6 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
     handleResponseTo(adaptCliAnswer, filePaths);
 
-    // Check that the file exists in the mcra-user-preferences fodler in the build/adapt folder.
     expect(fs.existsSync(mcraUserGenTemplateTs)).toBe(true);
 
     const mcraUserPreferenceUserGenTemplates = fs.readFileSync(
@@ -65,12 +72,11 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
       'utf8',
     );
 
-    // Check the content is equal to the new content of the user gen template
-    // and not the only template content
     expect(updatedUserGenTemplates).toStrictEqual(mcraUserPreferenceUserGenTemplates);
     expect(mcraUserPreferenceUserGenTemplates).not.toStrictEqual(userGenTemplateTextContent);
   }
 
+  /* MULTI CHECKING THE ADAPT COMMAND */
   // Repeating multiple times to check it is just succeding one time only.
   checkInitSetup();
   checkAdaptEditingBoilerplateWorks('fixtures/adapt/updated_user_gen_template.ts');
@@ -78,34 +84,58 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
   checkAdaptEditingBoilerplateWorks('fixtures/adapt/updated_user_gen_template.ts');
 
 
+  // ^=* Run the adapt command.
+  // ^=* Do an addition by using fixtures X.
+  // ^=* save the changes.
+  // ^=* Then run the adapt command again.
+  // ^=* Make changes via fixtures Y.
+  // ^=* Checkt hat contentence the mcra user_gen_template has remained
+  //     the same and has not changed to fixtures Y.
+  // ^=* Also do a test in which you have the docuemnt complete blank --> add answer no.
+  // ^=* Check that the code the same as the intial setup.
+
   adapt();
+
+  const fixturesGenTemplate = fs.readFileSync(path.join(__dirname, './fixtures/adapt/another_updated_user_gen_template.ts'), 'utf8');
+  fs.writeFileSync('./user_gen_templates.ts', fixturesGenTemplate);
+
+  const updatedUserGenTemplates = fs.readFileSync('./user_gen_templates.ts', 'utf8');
+  const currentMcraUserGenTemplates = fs.readFileSync(
+    mcraUserGenTemplateTs,
+    'utf8',
+  );
+
   const adaptCliAnswer = { confirmChangesToBoilerplate: false };
   const filePaths = { mcraUserGenTemplateTs };
 
-  // Make an edit using the fixtures.
-  // read what is inside the fixtures.
-
   handleResponseTo(adaptCliAnswer, filePaths);
+
+  expect(currentMcraUserGenTemplates).not.toStrictEqual(updatedUserGenTemplates);
+
+  const theFixtureTheMcraTemplateIsBasedOff = fs.readFileSync(
+    path.join(__dirname, './fixtures/adapt/updated_user_gen_template.ts'),
+    'utf8',
+  );
+  expect(currentMcraUserGenTemplates).toStrictEqual(theFixtureTheMcraTemplateIsBasedOff);
 });
 
-test('adapt --> no changes option', () => {
+test.skip('adapt --> no changes option', () => {
   // calling adapt.
   // then call handle response.
-  adapt();
-  const adaptCliAnswer = { confirmChangesToBoilerplate: false };
-  const filePaths = { mcraUserGenTemplateTs };
-
   // Make an edit using the fixtures.
   // read what is inside the fixtures.
-
-  handleResponseTo(adaptCliAnswer, filePaths);
-
   // check that the content the mcraUserGenTemplateTs is not equal to the edits
   // that have occured there. Do this in the other file as there changes
   //  that are already inside there.
 
   // There should be a user_gen_tempalte file in the root diroctory.
   // At the end of the session. This should also be the previous test as well
+  adapt();
+  const adaptCliAnswer = { confirmChangesToBoilerplate: false };
+  const filePaths = { mcraUserGenTemplateTs };
+
+  handleResponseTo(adaptCliAnswer, filePaths);
+
   const userGenTemplateExist = fs.existsSync('./user_gen_templates');
   expect(userGenTemplateExist).toBe(false);
 });
