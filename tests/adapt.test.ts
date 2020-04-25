@@ -119,17 +119,10 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
   expect(currentMcraUserGenTemplates).toStrictEqual(theFixtureTheMcraTemplateIsBasedOff);
 });
 
-test.skip('adapt --> no changes option', () => {
-  // calling adapt.
-  // then call handle response.
-  // Make an edit using the fixtures.
-  // read what is inside the fixtures.
-  // check that the content the mcraUserGenTemplateTs is not equal to the edits
-  // that have occured there. Do this in the other file as there changes
-  //  that are already inside there.
-
-  // There should be a user_gen_tempalte file in the root diroctory.
-  // At the end of the session. This should also be the previous test as well
+test('adapt --> no changes option', () => {
+  // ^=* Also do a test in which you have the docuemnt complete blank --> add answer no.
+  // ^=* Check that the code the same as the intial setup. If done reverse, the folder should be created.
+  //
   adapt();
   const adaptCliAnswer = { confirmChangesToBoilerplate: false };
   const filePaths = { mcraUserGenTemplateTs };
@@ -138,4 +131,7 @@ test.skip('adapt --> no changes option', () => {
 
   const userGenTemplateExist = fs.existsSync('./user_gen_templates');
   expect(userGenTemplateExist).toBe(false);
+
+  const mcraUserPreferencesDirHasBeenCreated = fs.existsSync('./build/adapt/mcra-user-preferences');
+  expect(mcraUserPreferencesDirHasBeenCreated).toBe(true);
 });
