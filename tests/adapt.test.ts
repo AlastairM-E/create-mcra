@@ -121,8 +121,8 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
 test('adapt --> no changes option', () => {
   // ^=* Also do a test in which you have the docuemnt complete blank --> add answer no.
-  // ^=* Check that the code the same as the intial setup. If done reverse, the folder should be created.
-  //
+  // ^=* Check that the code the same as the intial setup.
+  // If done reverse, the folder should be created.
   adapt();
   const adaptCliAnswer = { confirmChangesToBoilerplate: false };
   const filePaths = { mcraUserGenTemplateTs };
