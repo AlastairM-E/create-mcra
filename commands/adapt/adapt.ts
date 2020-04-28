@@ -8,6 +8,11 @@ const process = require('process');
 const inquirer = require('inquirer');
 const { handleResponseTo } = require('./handleResponseTo');
 
+/* INTERFACES */
+interface cliResponse {
+  confirmChangesToBoilerplate: boolean;
+}
+
 /* ADAPT */
 function adapt(): void {
   /* VARIABLES */
@@ -37,7 +42,7 @@ function adapt(): void {
     message: 'Do you to save the changes : ',
   };
 
-  inquirer.prompt(question).then((answer: { confirmChangesToBoilerplate: boolean }) => {
+  inquirer.prompt(question).then((answer: cliResponse) => {
     const filePaths = { userGenTemplatesAlreadyExists, mcraUserGenTemplateTs };
     handleResponseTo(answer, filePaths);
   });

@@ -14,58 +14,53 @@ function dynamicTemplateRequire() {
 }
 
 const {
-  initialIndexJsFile,
-  reactFunctionalTemplateFile,
-  jestTestingTemplateFile,
-  reactClassTemplateFile,
+  initialIndexJsFile, reactFunctionalTemplateFile, jestTestingTemplateFile, reactClassTemplateFile,
 } = dynamicTemplateRequire();
 const { readSubFilesFrom, appendToFilesLines } = require('create-rboil-utils');
 
+/* INTERFACES */
+interface Dir {
+  directory : string
+}
+
+/* GEN */
 function gen(args: string): void {
   /* VARIABLES */
   const nameOfModule = args[1];
   const flagForComponentType = args[2];
-  const currentDirectory = process.cwd();
-  const src = readSubFilesFrom(`${currentDirectory}/src`);
-  const components = `${currentDirectory}/src/components`;
-  const moduleDirectory = `${components}/${nameOfModule}`;
+  const currentDir = process.cwd();
+  const src = readSubFilesFrom(`${currentDir}/src`);
+  const components = `${currentDir}/src/components`;
+  const moduleDir = `${components}/${nameOfModule}`;
 
   /* LOGIC */
 
   // Flag logic
-  function templateReactComponent(flag: string, moduleName: string) {
+  function templateReactComponent(flag: string, moduleName: string): string {
     switch (flag) {
       case '-c':
         return reactClassTemplateFile(moduleName);
-        break;
 
       default:
         return reactFunctionalTemplateFile(moduleName);
-        break;
     }
   }
 
   // Adding components dir
-  const hasComponentFolderBeenAdded = src.filter((file: { directory : string }) => {
-    const folder = 'object';
-    if (typeof (file) === folder) {
-      return true;
-    }
-    return false;
-  });
+  const hasComponentFolderBeenAdded = src.filter((file: Dir) => file.directory !== undefined);
 
   if (hasComponentFolderBeenAdded.length === 0) {
     fs.mkdirSync(components);
   }
 
   // Adding module boilerplate
-  fs.mkdirSync(moduleDirectory);
+  fs.mkdirSync(moduleDir);
   fs.writeFileSync(
-    `${moduleDirectory}/${nameOfModule}.jsx`,
+    `${moduleDir}/${nameOfModule}.jsx`,
     templateReactComponent(flagForComponentType, nameOfModule),
   );
   fs.writeFileSync(
-    `${moduleDirectory}/${nameOfModule}.test.jsx`,
+    `${moduleDir}/${nameOfModule}.test.jsx`,
     jestTestingTemplateFile(nameOfModule),
   );
 
@@ -78,7 +73,6 @@ function gen(args: string): void {
     fs.writeFileSync(`${components}/index.js`, initialIndexJsFile(nameOfModule));
     return null;
   }
-  console.log('numerb of Modules', numberOfModules, numberOfModules + 3);
   appendToFilesLines(
     `${components}/index.js`,
     `import ${nameOfModule} from './${nameOfModule}/${nameOfModule}.jsx';\n`,

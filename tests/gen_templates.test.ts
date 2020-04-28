@@ -3,7 +3,10 @@ const {
 } = require('../build/gen_templates');
 
 const {
-  initialIndexJsFixture, reactFunctionalTemplateFixture, reactClassTemplateFixture, jestTestingTemplateFixture,
+  initialIndexJsFixture,
+  reactFunctionalTemplateFixture,
+  reactClassTemplateFixture,
+  jestTestingTemplateFixture,
 } = require('./fixtures/gen_templates/index.ts');
 
 test('The initialIndexJsFile function works as intented', () => {

@@ -14,7 +14,7 @@ function imp(args: string[]) {
   // write the object { "cli" : "xyz", "imp" : ["a", "b", "c"]}
 
   const [command, flag, ...nameOfPackages] = args;
-  const mcraUserPreferences = path.join(__dirname, '../node_modules/mcra-user-preferences');
+  const mcraUserPreferences = path.join(__dirname, './adapt/mcra-user-preferences');
   const impJson = `${mcraUserPreferences}/imp.json`;
 
   const mcra_User_Preferences_Exists = fs.existsSync(mcraUserPreferences) === false;

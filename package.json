@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "tsc && jest --watchAll ./tests"
+    "test": "tsc && jest --verbose ./tests"
   },
   "dependencies": {
     "@babel/core": "^7.9.0",
