@@ -2,8 +2,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const faker = require('faker');
-const imp = require('../build/imp');
-const { initialImpJsonfile } = require('./fixtures/imp');
+const { initialImpJsonfile } = require('./fixtures/imp/index.ts');
 
 /* CLEAN UP */
 beforeAll(() => {
@@ -30,6 +29,7 @@ test('An empty mcra imp command should create the initial mcra-user-preferences 
   // Run an empty mcra imp command.
   // Check that the imp.json file and mcra-user-prefernce dir now do exist.
   // Check that the fixture content and imp.json content are the same.
+
   const doesMcraUserPreferencesDirExist = () => fs.existsSync('./build/adapt/mcra-user-preferences');
   const doesImpJsonExist = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
 
@@ -90,14 +90,34 @@ test('the mcra imp command can add and remove package names stored in the imp.js
   expect(impJsonContent()).toStrictEqual(clearImpJsonFixture);
 });
 
-test('the imp -cli lag works to adapt add a single cli inside the imp.json file', () => {
+test('the imp -cli flag works to add a single cli inside the imp.json file', () => {
   // The cli flag should only add one main cli.
-  // Therefore, I need to execSync an mcra command which has a boilerplate of create-rboil.
+  // Therefore, I need to execSync an mcra command which has a cli of create-rboil.
   // Then I need to check that only that command has been returned.
-  execSync('mcra imp -cli create-rboil');
+  // Exec adding in a few new packages.
+  // Check the imp.json file changes in the expected way.
+  // Exec a command to implement a new cli : react-boilerplate.
+  // Check the imp.json file changes in the expected way.
+  // Exec a command to remove packages from the imp.json cli.
+  // Check the imp.json file changes in the expected way.
+  // Run a command which has multiple clis in the command.
+  // Check that this only changes the cli to have one cli in the property
+  // and does not have any additional problem.
 
   const impJsonContent = () => fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8');
-  const impJsonWithCliAdditionFixture = '{"cli":"create-rboil","packages":[]}';
 
-  expect(impJsonContent()).toStrictEqual(impJsonWithCliAdditionFixture);
+  execSync('mcra imp -cli create-rboil');
+  expect(impJsonContent()).toStrictEqual('{"cli":"create-rboil","packages":[]}');
+
+  execSync('mcra imp apple banana');
+  expect(impJsonContent()).toStrictEqual('{"cli":"create-rboil","packages":["banana","apple"]}');
+
+  execSync('mcra imp -cli react-boilerplate');
+  expect(impJsonContent()).toStrictEqual('{"cli":"react-boilerplate","packages":["banana","apple"]}');
+
+  execSync('mcra imp -rm apple');
+  expect(impJsonContent()).toStrictEqual('{"cli":"react-boilerplate","packages":["banana"]}');
+
+  execSync('mcra imp -cli create-react-app create-rboil');
+  expect(impJsonContent()).toStrictEqual('{"cli":"create-react-app","packages":["banana"]}');
 });
