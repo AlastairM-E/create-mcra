@@ -3,7 +3,7 @@ export {};
 const path = require('path');
 const fs = require('fs');
 
-function imp(args: string[]) {
+function imp(args: string[]): void {
   // First of all --> create a imp.txt.
   // take the args supplied to the function
   // wite it to the imp.txt file.
@@ -13,7 +13,7 @@ function imp(args: string[]) {
   // write the object { "cli" : "xyz"}; to the imp.json.
   // write the object { "cli" : "xyz", "imp" : ["a", "b", "c"]}
 
-  const [command, flag, ...nameOfPackages] = args;
+  const [command, flag, ...unSanitizedNameOfPackages] = args;
   const mcraUserPreferences = path.join(__dirname, './adapt/mcra-user-preferences');
   const impJson = `${mcraUserPreferences}/imp.json`;
 
@@ -30,6 +30,10 @@ function imp(args: string[]) {
 
   const impJsonContent = fs.existsSync(impJson) ? fs.readFileSync(impJson, 'utf8') : null;
   const { cli, packages } = JSON.parse(impJsonContent);
+  const nameOfPackages = unSanitizedNameOfPackages.map((item: any) => String(item));
+  console.log({ packages }, packages !== undefined);
+  const sanitizedPackages = packages !== undefined ? packages.map((item: any) => String(item)) : null;
+  console.log(sanitizedPackages);
 
   // what makes sense:
   // - is to have a single
@@ -37,12 +41,12 @@ function imp(args: string[]) {
   switch (flag) {
     case '-cli':
       const newCli = { cli: nameOfPackages[0] };
-      const newJsonCli = JSON.stringify({ ...newCli, packages });
+      const newJsonCli = JSON.stringify({ ...newCli, packages: sanitizedPackages });
       fs.writeFileSync(impJson, newJsonCli);
       break;
 
     case '-rm':
-      const filterPackages = packages.filter((nodePackage: string) => nameOfPackages.find((item) => {
+      const filterPackages = sanitizedPackages.filter((nodePackage: string) => nameOfPackages.find((item) => {
         if (item === nodePackage) {
           console.log(`removed ${nodePackage}`);
           return true;
@@ -53,10 +57,15 @@ function imp(args: string[]) {
       fs.writeFileSync(impJson, filterJsonPackages);
       break;
 
-    default:
-      nameOfPackages.push(flag);
+    case '' || null || undefined:
+      console.log('You need to add in a package name or flag at the end of the command');
+      return null;
 
-      const packageSet = new Set([...nameOfPackages, ...packages]);
+    default:
+      nameOfPackages.push(String(flag));
+      console.log({ nameOfPackages, flag }, String(flag));
+
+      const packageSet = new Set([...nameOfPackages, ...sanitizedPackages]);
       const newPackages = { packages: [...packageSet] };
       const newJsonPackages = JSON.stringify({ cli, ...newPackages });
 
@@ -65,6 +74,8 @@ function imp(args: string[]) {
       console.log(`added ${nameOfPackages.join(' ')}`);
       break;
   }
+
+  return null;
 }
 
 module.exports = imp;
