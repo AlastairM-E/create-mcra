@@ -46,6 +46,7 @@ test('An empty mcra imp command should create the initial mcra-user-preferences 
 });
 
 test('the mcra imp command can add and remove package names stored in the imp.json', () => {
+  // ADDING PACKAGES
   // Create the appriopriate fixtures a text export.
   // Have a certain package name.
   // run mcra imp (package-name).
@@ -54,11 +55,7 @@ test('the mcra imp command can add and remove package names stored in the imp.js
   // Input multiple packages more (banana, apple and pineapple).
   // Make a fixture out of those pacakges.
   // check that the expected value returns the 3 packages recently added and the fakePackageName.
-  // ^=* This will be done by runing the execSync('mcra imp -rm (fakePackageName)').
-  // ^=* Then check that the removal worked by looking creating a fixture.
-  // ^=* Then check that the imp.json contentis equal to the fixture.
 
-  // ADDING PACKAGES
   const fakePackageName = faker.hacker.noun();
 
   execSync(`mcra imp ${fakePackageName}`);
@@ -74,4 +71,21 @@ test('the mcra imp command can add and remove package names stored in the imp.js
   expect(impJsonContent()).toStrictEqual(multiplePackageImpJsonFixture);
 
   // REMOVING PACKAGES
+  // This will be done by runing the execSync('mcra imp -rm (fakePackageName)').
+  // Then check that the removal worked by looking creating a fixture.
+  // Then check that the imp.json contentis equal to the fixture.
+  // Check that the removal feature can work for multiple packages by:
+  // Exec the command mcra imp -rm apple banana pineapple.
+  // Check that the removal worked by expecting the impJsonContent
+  // is equal to a clearImpJsonFixture.
+
+  execSync(`mcra imp -rm ${fakePackageName}`);
+  const fakePackageRemovedFromImpJsonFixture = '{"cli":"","packages":["banana","pineapple","apple"]}';
+
+  expect(impJsonContent()).toStrictEqual(fakePackageRemovedFromImpJsonFixture);
+
+  execSync('mcra imp -rm apple banana pineapple');
+
+  const clearImpJsonFixture = '{"cli":"","packages":[]}';
+  expect(impJsonContent()).toStrictEqual(clearImpJsonFixture);
 });
