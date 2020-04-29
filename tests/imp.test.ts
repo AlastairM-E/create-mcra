@@ -89,3 +89,15 @@ test('the mcra imp command can add and remove package names stored in the imp.js
   const clearImpJsonFixture = '{"cli":"","packages":[]}';
   expect(impJsonContent()).toStrictEqual(clearImpJsonFixture);
 });
+
+test('the imp -cli lag works to adapt add a single cli inside the imp.json file', () => {
+  // The cli flag should only add one main cli.
+  // Therefore, I need to execSync an mcra command which has a boilerplate of create-rboil.
+  // Then I need to check that only that command has been returned.
+  execSync('mcra imp -cli create-rboil');
+
+  const impJsonContent = () => fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8');
+  const impJsonWithCliAdditionFixture = '{"cli":"create-rboil","packages":[]}';
+
+  expect(impJsonContent()).toStrictEqual(impJsonWithCliAdditionFixture);
+});
