@@ -19,7 +19,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "tsc && jest --verbose ./tests"
+    "test": "tsc && jest --verbose --collectCoverage ./tests",
+    "createBoilerplateTest": "tsc && jest --verbose --collectCoverage ./Intergration"
   },
   "dependencies": {
     "@babel/core": "^7.9.0",

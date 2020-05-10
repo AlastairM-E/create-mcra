@@ -48,15 +48,16 @@ test('An empty mcra imp command should create the initial mcra-user-preferences 
 test('the mcra imp command can add and remove package names stored in the imp.json', () => {
   // ADDING PACKAGES
   // Create the appriopriate fixtures a text export.
-  // Have a certain package name.
-  // run mcra imp (package-name).
+  // Make a fake package name which has no spaces in the package name
+  // (this is done by using the faker.lorem.word() to get just a single word).
+  // Run mcra imp (package-name).
   // Check the imp.json is equal to the intital imp.json file content.
   // Check that mcra imp.json contains the same text.
   // Input multiple packages more (banana, apple and pineapple).
   // Make a fixture out of those pacakges.
-  // check that the expected value returns the 3 packages recently added and the fakePackageName.
+  // Check that the expected value returns the 3 packages recently added and the fakePackageName.
 
-  const fakePackageName = faker.hacker.noun();
+  const fakePackageName = faker.lorem.word();
 
   execSync(`mcra imp ${fakePackageName}`);
 

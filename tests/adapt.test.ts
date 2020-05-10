@@ -84,15 +84,15 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
   checkAdaptEditingBoilerplateWorks('fixtures/adapt/updated_user_gen_template.ts');
 
 
-  // ^=* Run the adapt command.
-  // ^=* Do an addition by using fixtures X.
-  // ^=* save the changes.
-  // ^=* Then run the adapt command again.
-  // ^=* Make changes via fixtures Y.
-  // ^=* Checkt hat contentence the mcra user_gen_template has remained
-  //     the same and has not changed to fixtures Y.
-  // ^=* Also do a test in which you have the docuemnt complete blank --> add answer no.
-  // ^=* Check that the code the same as the intial setup.
+  // Run the adapt command.
+  // Do an addition by using fixtures X.
+  // save the changes.
+  // Then run the adapt command again.
+  // Make changes via fixtures Y.
+  // Check that contentence the mcra user_gen_template has remained
+  // the same and has not changed to fixtures Y.
+  // Also do a test in which you have the docuemnt complete blank --> add answer no.
+  // Check that the code the same as the intial setup.
 
   adapt();
 
