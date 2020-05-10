@@ -2,6 +2,7 @@ const fs = require('fs');
 const faker = require('faker');
 const { newCli, packagesToBeInstalled } = require('../build/createBoilerplate/index.js');
 
+/* CLEAN UP */
 beforeAll(() => {
   // Check the imp.json file is there and remove the imp.json file.
   // Check the mcra-user-preferences dir is there and remove the mcra-user-preferences dir.
@@ -24,6 +25,7 @@ afterEach(() => {
   }
 });
 
+/* TESTS */
 test('The newCli will return the apprioprate response if the package manager is npm, yarn or not a package manager at all', () => {
   /* NEWCLI */
   // The test will return the apprioprate command for npm & yarn packages
@@ -53,14 +55,15 @@ test('The newCli will return the apprioprate response if the package manager is 
 });
 
 test('packagesToBeInstalled returns the additional packages or cli if the imp.json has been implemented to do so', () => {
-  /* packagesToBeInstalled TEST */
+  /* packagesToBeInstalled */
   // =* Should return create-react-app and null if it has been cold called.
   // ^=* BeforeEach to check that their is no imp.json and mcra-user-preferences.
   // ^=* AfterEach to just to clean up the imp.json as well.
   // ^=* const [boilerplateCli, additionalPackages] = packagesToBeInstalled();
   // ^=* boilerplateCli should be equal to create-react-app.
   // ^=* additionalPackages should be equal to null.
-  // =* If one has done the imp for a cli and a boilerplate, check that those has returned the changes to.
+  // =* If one has done the imp for a cli and a boilerplate, check that those has
+  // returned the changes to.
   // ^=* Faker lorem word for boilerplateCli.
   // ^=* Faker.lorem.word for additional package.
   // ^=* execSync(`mcra imp -cli ${boilerplateCli}`).
