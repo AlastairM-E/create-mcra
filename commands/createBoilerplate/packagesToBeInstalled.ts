@@ -1,15 +1,16 @@
 export {};
 
 const fs = require('fs');
-const path = require('path');
+
 
 function packagesToBeInstalled(): [string, void | string[]] {
-  const impJson = path.join(__dirname, '../node_modules/mcra-user-preferences/imp.json');
+  const impJsonExists = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
   const defaultBoilerplate: string = 'create-react-app';
   const noAdditionalPackages: void = null;
 
-  if (fs.existsSync(impJson)) {
-    const { cli, packages } = JSON.parse(fs.readFileSync(impJson, 'utf8'));
+  if (impJsonExists()) {
+    const { cli, packages } = JSON.parse(fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8'));
+    console.log('packagesToBeInstalled', { cli, packages });
     return [cli, packages];
   }
   return [defaultBoilerplate, noAdditionalPackages];

@@ -1,29 +1,5 @@
-const fs = require('fs');
 const faker = require('faker');
-const { newCli, packagesToBeInstalled } = require('../build/createBoilerplate/index.js');
-
-/* CLEAN UP */
-beforeAll(() => {
-  // Check the imp.json file is there and remove the imp.json file.
-  // Check the mcra-user-preferences dir is there and remove the mcra-user-preferences dir.
-  if (fs.existsSync('./build/adapt/mcra-user-preferences/imp.json')) {
-    fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
-  }
-  if (fs.existsSync('./build/adapt/mcra-user-preferences')) {
-    fs.rmdirSync('./build/adapt/mcra-user-preferences');
-  }
-});
-
-afterEach(() => {
-  // Check the imp.json file is there and remove the imp.json file.
-  // Check the mcra-user-preferences dir is there and remove the mcra-user-preferences dir.
-  if (fs.existsSync('./build/adapt/mcra-user-preferences/imp.json')) {
-    fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
-  }
-  if (fs.existsSync('./build/adapt/mcra-user-preferences')) {
-    fs.rmdirSync('./build/adapt/mcra-user-preferences');
-  }
-});
+const { newCli, tryToInstallAdditionalPackages } = require('../build/createBoilerplate/index');
 
 /* TESTS */
 test('The newCli will return the apprioprate response if the package manager is npm, yarn or not a package manager at all', () => {
@@ -54,31 +30,22 @@ test('The newCli will return the apprioprate response if the package manager is 
   expect(() => newCli(fakePackageManager, fakeBoilerplateCli)).toThrowError();
 });
 
-test('packagesToBeInstalled returns the additional packages or cli if the imp.json has been implemented to do so', () => {
-  /* packagesToBeInstalled */
-  // =* Should return create-react-app and null if it has been cold called.
-  // ^=* BeforeEach to check that their is no imp.json and mcra-user-preferences.
-  // ^=* AfterEach to just to clean up the imp.json as well.
-  // ^=* const [boilerplateCli, additionalPackages] = packagesToBeInstalled();
-  // ^=* boilerplateCli should be equal to create-react-app.
-  // ^=* additionalPackages should be equal to null.
-  // =* If one has done the imp for a cli and a boilerplate, check that those has
-  // returned the changes to.
-  // ^=* Faker lorem word for boilerplateCli.
-  // ^=* Faker.lorem.word for additional package.
-  // ^=* execSync(`mcra imp -cli ${boilerplateCli}`).
-  // ^=* execSync(`mcra imp ${additionalPackages} aRandomFakerPackage`).
-  // ^=* should have boilerCli which is equal to the fakerBoielrplate Cli.
-  // ^=* should ahve additional packages equal to [additonalPackage, 'aRandomFakerPackage'].
-  const [defaultCli, defaultAdditionalPackages] = packagesToBeInstalled();
-  expect(defaultCli).toStrictEqual('create-react-app');
-  expect(defaultAdditionalPackages).toStrictEqual(null);
+test('tryToInstallAdditionalPackages returns the apprioprate command which can will lead to the installation of a package', () => {
+  // Check that the module returns an empy string no additional packages.
+  // Check that when it is 'yarn' as the package manager, 'add' as the dev installation
+  //     and the addtional packagesas the additional packages.
+  // Check that when npm is passed, the additional packages are returned
+  // and with a dev installiation of 'install'.
+  const noAdditionalPackagesCommand = tryToInstallAdditionalPackages('npm', null);
+  expect(noAdditionalPackagesCommand).toStrictEqual(false);
 
-  // const fakeBoilerplateCli = faker.lorem.word();
-  // const fakePackageName = faker.lorem.word();
+  const fakePackageName = faker.lorem.word();
+  const additionalPackages = [fakePackageName, 'aRandomFakerPackage'];
+  const npmAdditionalPackagesCommand = tryToInstallAdditionalPackages('npm', additionalPackages);
 
-  // execSync(`mcra imp -cli ${fakeBoilerplateCli}`);
-  // execSync(`mcra imp ${fakePackageName} aRandomFakerPackage`);
+  expect(npmAdditionalPackagesCommand).toStrictEqual(`npm install ${fakePackageName} aRandomFakerPackage`);
 
-  // expect()
+  const yarnAdditionalPackagesCommand = tryToInstallAdditionalPackages('yarn', additionalPackages);
+
+  expect(yarnAdditionalPackagesCommand).toStrictEqual(`yarn add ${fakePackageName} aRandomFakerPackage`);
 });

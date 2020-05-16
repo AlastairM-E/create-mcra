@@ -3,24 +3,45 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const faker = require('faker');
 const { initialImpJsonfile } = require('./fixtures/imp/index.ts');
+const { packagesToBeInstalled } = require('../build/createBoilerplate/index');
 
 /* CLEAN UP */
-beforeAll(() => {
+beforeEach(() => {
   // Check the imp.json file is there and remove the imp.json file.
   // Check the mcra-user-preferences dir is there and remove the mcra-user-preferences dir.
-  if (fs.existsSync('./build/adapt/mcra-user-preferences/imp.json')) {
+  const doesImpJsonExist = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
+  const doesMcraUserPreferencesDirExist = () => fs.existsSync('./build/adapt/mcra-user-preferences');
+
+  if (doesImpJsonExist()) {
     fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
   }
-  if (fs.existsSync('./build/adapt/mcra-user-preferences')) {
+  if (doesMcraUserPreferencesDirExist()) {
     fs.rmdirSync('./build/adapt/mcra-user-preferences');
   }
+
+  // console.log('imp', 'before', {
+  //   doesImpJsonExist: doesImpJsonExist(),
+  //   doesMcraUserPreferencesDirExist: doesMcraUserPreferencesDirExist(),
+  // });
 });
 
 afterEach(() => {
-  // Remove the imp.json file.
-  // Remove the mcra-user-preferences dir.
-  fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
-  fs.rmdirSync('./build/adapt/mcra-user-preferences');
+  // Check & Remove the imp.json file.
+  // Check & Remove the mcra-user-preferences dir.
+  const doesImpJsonExist = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
+  const doesMcraUserPreferencesDirExist = () => fs.existsSync('./build/adapt/mcra-user-preferences');
+
+  if (doesImpJsonExist()) {
+    fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
+  }
+  if (doesMcraUserPreferencesDirExist()) {
+    fs.rmdirSync('./build/adapt/mcra-user-preferences');
+  }
+
+  // console.log('imp', 'after', {
+  //   doesImpJsonExist: doesImpJsonExist(),
+  //   doesMcraUserPreferencesDirExist: doesMcraUserPreferencesDirExist(),
+  // });
 });
 
 /* TESTS */
@@ -121,4 +142,41 @@ test('the imp -cli flag works to add a single cli inside the imp.json file', () 
 
   execSync('mcra imp -cli create-react-app create-rboil');
   expect(impJsonContent()).toStrictEqual('{"cli":"create-react-app","packages":["banana"]}');
+});
+
+test('packagesToBeInstalled returns the additional packages or cli if the imp.json has been implemented to do so', () => {
+  /* packagesToBeInstalled */
+  // packagesToBeInstalled should return create-react-app and null if it has been called
+  // without previous mcra imp commands being run.
+  // const [boilerplateCli, additionalPackages] = packagesToBeInstalled();
+  // boilerplateCli should be equal to create-react-app.
+  // additionalPackages should be equal to null.
+  // If run a mcra imp command (cli and packages), the packagesToBeInstalled() should pick up
+  // on the changes and the return them.
+  // Faker.lorem word for boilerplateCli.
+  // Faker.lorem.word for additional package.
+  // execSync(`mcra imp -cli ${boilerplateCli}`).
+  // execSync(`mcra imp ${additionalPackages} aRandomFakerPackage`).
+  // should have boilerCli which is equal to the fakerBoielrplate Cli.
+  // should ahve additional packages equal to [additonalPackage, 'aRandomFakerPackage'].
+
+  const [defaultCli, defaultAdditionalPackages] = packagesToBeInstalled();
+
+  expect(defaultCli).toStrictEqual('create-react-app');
+  expect(defaultAdditionalPackages).toStrictEqual(null);
+
+  const fakeBoilerplateCli = faker.lorem.word();
+  const fakePackageName = faker.lorem.word();
+
+  execSync(`mcra imp -cli ${fakeBoilerplateCli}`);
+  execSync(`mcra imp ${fakePackageName} aRandomFakerPackage`);
+
+  const [impCli, impAdditionalPackages] = packagesToBeInstalled();
+
+  const expectedImpCliAndAdditionalPackages = {
+    impCli: fakeBoilerplateCli,
+    impAdditionalPackages: ['aRandomFakerPackage', fakePackageName],
+  };
+
+  expect({ impCli, impAdditionalPackages }).toStrictEqual(expectedImpCliAndAdditionalPackages);
 });

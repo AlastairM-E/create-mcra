@@ -7,7 +7,7 @@
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
-        "downlevelIteration": true
+        "downlevelIteration": true,
     },
     "include": [
         "./commands/**/*"
