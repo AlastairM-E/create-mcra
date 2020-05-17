@@ -9,8 +9,9 @@ function packagesToBeInstalled(): [string, void | string[]] {
   const noAdditionalPackages: void = null;
 
   if (impJsonExists()) {
-    const { cli, packages } = JSON.parse(fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8'));
-    console.log('packagesToBeInstalled', { cli, packages });
+    const { cli, packages } = JSON.parse(
+      fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8'),
+    );
     return [cli, packages];
   }
   return [defaultBoilerplate, noAdditionalPackages];
