@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "inter": "tsc && node ./",
     "test": "tsc && jest --verbose --collectCoverage ./tests",
     "createBoilerplateTest": "tsc && jest --verbose --collectCoverage ./Intergration",
     "test./": "jest ./index.test.ts"

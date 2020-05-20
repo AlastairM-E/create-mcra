@@ -1,4 +1,4 @@
-const createBoilerplate = require('./build/createBoilerplate');
+const { execSync } = require('child_process');
 
-createBoilerplate('--yarn newProject --typescript');
-createBoilerplate('XYZ --styled');
+execSync('mcra imp -cli create-rboil', { cwd: './intergration/fixtures' });
+execSync('npx create-mcra test-project-zero', { cwd: './intergration/fixtures' });

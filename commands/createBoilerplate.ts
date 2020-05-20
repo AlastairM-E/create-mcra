@@ -7,6 +7,7 @@ const { packagesToBeInstalled, newCli, tryToInstallAdditionalPackages } = requir
 function createBoilerplate(args: string) {
   const [projectName, ...cliSettings]: string[] = args.split(' ');
   const flag: string = cliSettings.pop();
+
   const [cli, additionalPackages]: [string, string] = packagesToBeInstalled();
 
   const packageManager: string = flag === '--yarn' ? 'yarn' : 'npm';
@@ -14,7 +15,7 @@ function createBoilerplate(args: string) {
 
   console.log(`${cli} magic: this will take a couple of minutes so relax.`);
 
-  execSync(boilerplateCli);
+  execSync(`${boilerplateCli} ${projectName} ${cliSettings}`);
 
   const installAdditionalPackagesCommand: boolean | string = tryToInstallAdditionalPackages(
     packageManager, additionalPackages,
