@@ -1,22 +1,27 @@
 /* IMPORTS */
 const { execSync } = require('child_process');
 const fs = require('fs');
+const path = require('path');
+const process = require('process');
 const faker = require('faker');
 const { initialImpJsonfile } = require('./fixtures/imp/index.ts');
 const { packagesToBeInstalled } = require('../build/createBoilerplate/index');
+
+const pathToMcraUserPrefencesDir = path.join(process.cwd(), 'mcra-user-preferences');
+const pathToImpJson = path.join(pathToMcraUserPrefencesDir, 'imp.json');
 
 /* CLEAN UP */
 beforeEach(() => {
   // Check the imp.json file is there and remove the imp.json file.
   // Check the mcra-user-preferences dir is there and remove the mcra-user-preferences dir.
-  const doesImpJsonExist = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
-  const doesMcraUserPreferencesDirExist = () => fs.existsSync('./build/adapt/mcra-user-preferences');
+  const doesImpJsonExist = () => fs.existsSync(pathToImpJson);
+  const doesMcraUserPreferencesDirExist = () => fs.existsSync(pathToMcraUserPrefencesDir);
 
   if (doesImpJsonExist()) {
-    fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
+    fs.unlinkSync(pathToImpJson);
   }
   if (doesMcraUserPreferencesDirExist()) {
-    fs.rmdirSync('./build/adapt/mcra-user-preferences');
+    fs.rmdirSync(pathToMcraUserPrefencesDir);
   }
 
   // console.log('imp', 'before', {
@@ -28,14 +33,14 @@ beforeEach(() => {
 afterEach(() => {
   // Check & Remove the imp.json file.
   // Check & Remove the mcra-user-preferences dir.
-  const doesImpJsonExist = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
-  const doesMcraUserPreferencesDirExist = () => fs.existsSync('./build/adapt/mcra-user-preferences');
+  const doesImpJsonExist = () => fs.existsSync(pathToImpJson);
+  const doesMcraUserPreferencesDirExist = () => fs.existsSync(pathToMcraUserPrefencesDir);
 
   if (doesImpJsonExist()) {
-    fs.unlinkSync('./build/adapt/mcra-user-preferences/imp.json');
+    fs.unlinkSync(pathToImpJson);
   }
   if (doesMcraUserPreferencesDirExist()) {
-    fs.rmdirSync('./build/adapt/mcra-user-preferences');
+    fs.rmdirSync(pathToMcraUserPrefencesDir);
   }
 
   // console.log('imp', 'after', {
@@ -51,8 +56,8 @@ test('An empty mcra imp command should create the initial mcra-user-preferences 
   // Check that the imp.json file and mcra-user-prefernce dir now do exist.
   // Check that the fixture content and imp.json content are the same.
 
-  const doesMcraUserPreferencesDirExist = () => fs.existsSync('./build/adapt/mcra-user-preferences');
-  const doesImpJsonExist = () => fs.existsSync('./build/adapt/mcra-user-preferences/imp.json');
+  const doesMcraUserPreferencesDirExist = () => fs.existsSync(pathToMcraUserPrefencesDir);
+  const doesImpJsonExist = () => fs.existsSync(pathToImpJson);
 
   expect(doesMcraUserPreferencesDirExist()).toBe(false);
   expect(doesImpJsonExist()).toBe(false);
@@ -62,7 +67,7 @@ test('An empty mcra imp command should create the initial mcra-user-preferences 
   expect(doesMcraUserPreferencesDirExist()).toBe(true);
   expect(doesImpJsonExist()).toBe(true);
 
-  const impJsonContent = fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8');
+  const impJsonContent = fs.readFileSync(pathToImpJson, 'utf8');
   expect(impJsonContent).toStrictEqual(initialImpJsonfile);
 });
 
@@ -82,7 +87,7 @@ test('the mcra imp command can add and remove package names stored in the imp.js
 
   execSync(`mcra imp ${fakePackageName}`);
 
-  const impJsonContent = () => fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8');
+  const impJsonContent = () => fs.readFileSync(pathToImpJson, 'utf8');
   const newImpJsonFixture = `{"cli":"","packages":["${fakePackageName}"]}`;
 
   expect(impJsonContent()).toStrictEqual(newImpJsonFixture);
@@ -126,7 +131,7 @@ test('the imp -cli flag works to add a single cli inside the imp.json file', () 
   // Check that this only changes the cli to have one cli in the property
   // and does not have any additional problem.
 
-  const impJsonContent = () => fs.readFileSync('./build/adapt/mcra-user-preferences/imp.json', 'utf8');
+  const impJsonContent = () => fs.readFileSync(pathToImpJson, 'utf8');
 
   execSync('mcra imp -cli create-rboil');
   expect(impJsonContent()).toStrictEqual('{"cli":"create-rboil","packages":[]}');

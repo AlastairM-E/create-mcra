@@ -2,6 +2,7 @@ export {};
 
 const path = require('path');
 const fs = require('fs');
+const process = require('process');
 
 function impJsonContent(impJson: string): { cli: string; packages: string[] } {
   if (fs.existsSync(impJson)) {
@@ -15,20 +16,9 @@ function sanitizeItem(item: any): string {
 }
 
 function imp(args: string[]): void {
-  // First of all --> create a imp.txt.
-  // take the args supplied to the function
-  // wite it to the imp.txt file.
-  // create a flag if it is the cli or package to be installed. (-cli | default to
-  // an aditional package).
-  // make a switch case.
-  // check if file is imp.json exist, if so, take the content for evalution,
-  // if not create a new json file.
-  // write the object { "cli" : "xyz"}; to the imp.json.
-  // write the object { "cli" : "xyz", "imp" : ["a", "b", "c"]}
-
   const [, flag, ...newUnsanitizedPackages] = args;
-  const mcraUserPreferences = path.join(__dirname, './adapt/mcra-user-preferences');
-  const impJson = `${mcraUserPreferences}/imp.json`;
+  const mcraUserPreferences = path.join(process.cwd(), './mcra-user-preferences');
+  const impJson = path.join(mcraUserPreferences, 'imp.json');
 
   if (fs.existsSync(mcraUserPreferences) === false) {
     fs.mkdirSync(mcraUserPreferences);
@@ -38,46 +28,50 @@ function imp(args: string[]): void {
     fs.writeFileSync(impJson, '{ "cli" : "", "packages" : [] }');
   }
 
-
   const { cli, packages } = impJsonContent(impJson);
-  const nameOfPackages = newUnsanitizedPackages.map(sanitizeItem);
+  const userInputedPackages = newUnsanitizedPackages.map(sanitizeItem);
   const oldSanitizedPackages = packages.map(sanitizeItem);
 
   function addNewCliToImpJson() {
-    const newCli = { cli: nameOfPackages[0] };
-    const newJsonCli = JSON.stringify({ ...newCli, packages: oldSanitizedPackages });
+    const newJsonCli = JSON.stringify({
+      cli: userInputedPackages[0],
+      packages: oldSanitizedPackages,
+    });
     fs.writeFileSync(impJson, newJsonCli);
   }
 
   function removePackagesFromImpJson() {
-    const filterPackages = oldSanitizedPackages.filter(
-      (nodePackage: string) => nameOfPackages.find((item) => {
-        if (item === nodePackage) {
-          console.log(`removed ${nodePackage}`);
-          return true;
-        }
-        return false;
-      }) === undefined,
-    );
+    // if remove Node Package is success, it will true, which will not be equal to undefined.
+    // Becuase it is not equal to undefined, it will return false and the item
+    // in the oldSanitizedPackages wll be deleted.w
+    // from the namesOfPackages, show the items whcih will be deleted.
+    // However, if it return nothing, undefined from the array.find function,
+    // then the removeNodePackage will return true. Thus , the apckage will not be remove.
+    // Then all the oldSanitizedPackages are iterated untill the new list of packages
+    // for the imp.json has been filtered out.
+    const packageUnfounded: undefined = undefined;
+    const removeNodePackage = (nodePackage: string) => userInputedPackages.find((item: string) => {
+      function successfullyFoundNodePackageToRemove(): boolean {
+        console.log(`removed ${nodePackage}`);
+        return true;
+      }
+      return item === nodePackage ? successfullyFoundNodePackageToRemove() : false;
+    }) === packageUnfounded;
+    const filterPackages = oldSanitizedPackages.filter(removeNodePackage);
     const filterJsonPackages = JSON.stringify({ cli, packages: filterPackages });
     fs.writeFileSync(impJson, filterJsonPackages);
   }
 
   function addNewPackagesToImpJson() {
-    nameOfPackages.push(String(flag));
+    userInputedPackages.push(String(flag));
 
-    console.log({ nameOfPackages, flag }, String(flag));
-
-    const packageSet = new Set([...nameOfPackages, ...oldSanitizedPackages]);
+    const packageSet = new Set([...userInputedPackages, ...oldSanitizedPackages]);
     const newJsonPackages = JSON.stringify({ cli, packages: [...packageSet] });
 
     fs.writeFileSync(impJson, newJsonPackages);
 
-    console.log(`added ${nameOfPackages.join(' ')}`);
+    console.log(`added ${userInputedPackages.join(' ')}`);
   }
-
-  // what makes sense:
-  // - is to have a single
 
   switch (flag) {
     case '-cli':
