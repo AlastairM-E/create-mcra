@@ -5,15 +5,15 @@ interface answer {
 }
 
 interface filePaths {
-    mcraUserGenTemplateTs: string;
+    mcraUserGenTemplatePath: string;
 }
 
-function handleResponseTo(answer: answer, { mcraUserGenTemplateTs }: filePaths): void {
+function handleResponseTo(answer: answer, { mcraUserGenTemplatePath }: filePaths): void {
   const confirmedChanges = answer.confirmChangesToBoilerplate;
   const newTemplateFileContent = fs.readFileSync(`${process.cwd()}/user_gen_templates.ts`, 'utf8');
 
   if (confirmedChanges) {
-    fs.writeFileSync(mcraUserGenTemplateTs, newTemplateFileContent);
+    fs.writeFileSync(mcraUserGenTemplatePath, newTemplateFileContent);
   }
 
   fs.unlinkSync(`${process.cwd()}/user_gen_templates.ts`);

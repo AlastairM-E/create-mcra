@@ -16,9 +16,9 @@ interface cliResponse {
 /* ADAPT */
 function adapt(): void {
   /* VARIABLES */
-  const mcraUserPreferences = path.join(__dirname, 'mcra-user-preferences');
-  const mcraUserGenTemplateTs = `${mcraUserPreferences}/user_gen_templates.ts`;
-  const userGenTemplatesAlreadyExists = fs.existsSync(mcraUserGenTemplateTs);
+  const mcraUserPreferences = path.join(process.cwd(), 'mcra-user-preferences');
+  const mcraUserGenTemplatePath = `${mcraUserPreferences}/user_gen_templates.ts`;
+  const userGenTemplatesAlreadyExists = fs.existsSync(mcraUserGenTemplatePath);
 
   /* LOGIC */
   if (fs.existsSync(mcraUserPreferences) === false) {
@@ -27,7 +27,7 @@ function adapt(): void {
 
   function pathToCopyTemplates() {
     if (userGenTemplatesAlreadyExists) {
-      return mcraUserGenTemplateTs;
+      return mcraUserGenTemplatePath;
     }
     return path.join(__dirname, '../../commands/gen_templates.ts');
   }
@@ -42,8 +42,9 @@ function adapt(): void {
     message: 'Do you to save the changes : ',
   };
 
+
   inquirer.prompt(question).then((answer: cliResponse) => {
-    const filePaths = { userGenTemplatesAlreadyExists, mcraUserGenTemplateTs };
+    const filePaths = { userGenTemplatesAlreadyExists, mcraUserGenTemplatePath };
     handleResponseTo(answer, filePaths);
   });
 

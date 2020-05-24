@@ -1,18 +1,20 @@
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
 const adapt = require('../build/adapt/adapt');
 const { handleResponseTo } = require('../build/adapt/handleResponseTo');
 
-const mcraUserGenTemplateTs = '/Users/alastair/Documents/meta-cra/build/adapt/mcra-user-preferences/user_gen_templates.ts';
+const mcraUserPreferencesDir = path.join(process.cwd(), 'mcra-user-preferences');
+const mcraUserGenTemplatePath = path.join(process.cwd(), 'mcra-user-preferences/user_gen_templates.ts');
 
 /* CLEAN UP ADAPT COMMAND */
 // check whether the user_gen_templates.ts file exists
 // If it does, then unlink (default else, don't do anything).
 function cleanUpAdaptCommand() {
-  if (fs.existsSync(mcraUserGenTemplateTs)) {
-    fs.unlinkSync(mcraUserGenTemplateTs);
+  if (fs.existsSync(mcraUserGenTemplatePath)) {
+    fs.unlinkSync(mcraUserGenTemplatePath);
   }
-  fs.rmdirSync('./build/adapt/mcra-user-preferences');
+  fs.rmdirSync(mcraUserPreferencesDir);
 }
 
 afterEach(() => {
@@ -31,7 +33,7 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
     const userGenTemplatesTsHasBeenCreated = fs.existsSync('./user_gen_templates.ts');
     expect(userGenTemplatesTsHasBeenCreated).toBe(true);
 
-    const mcraUserPreferencesDirHasBeenCreated = fs.existsSync('./build/adapt/mcra-user-preferences');
+    const mcraUserPreferencesDirHasBeenCreated = fs.existsSync(mcraUserPreferencesDir);
     expect(mcraUserPreferencesDirHasBeenCreated).toBe(true);
 
     const userGenTemplateTextContent = fs.readFileSync('./user_gen_templates.ts', 'utf8');
@@ -56,7 +58,7 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
     const userGenTemplateTextContent = fs.readFileSync('./user_gen_templates.ts', 'utf8');
     const adaptCliAnswer = { confirmChangesToBoilerplate: true };
-    const filePaths = { mcraUserGenTemplateTs };
+    const filePaths = { mcraUserGenTemplatePath };
     const fixturesGenTemplate = fs.readFileSync(path.join(__dirname, fixturePath), 'utf8');
 
     fs.writeFileSync('./user_gen_templates.ts', fixturesGenTemplate);
@@ -65,10 +67,10 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
     handleResponseTo(adaptCliAnswer, filePaths);
 
-    expect(fs.existsSync(mcraUserGenTemplateTs)).toBe(true);
+    expect(fs.existsSync(mcraUserGenTemplatePath)).toBe(true);
 
     const mcraUserPreferenceUserGenTemplates = fs.readFileSync(
-      mcraUserGenTemplateTs,
+      mcraUserGenTemplatePath,
       'utf8',
     );
 
@@ -101,12 +103,12 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
   const updatedUserGenTemplates = fs.readFileSync('./user_gen_templates.ts', 'utf8');
   const currentMcraUserGenTemplates = fs.readFileSync(
-    mcraUserGenTemplateTs,
+    mcraUserGenTemplatePath,
     'utf8',
   );
 
   const adaptCliAnswer = { confirmChangesToBoilerplate: false };
-  const filePaths = { mcraUserGenTemplateTs };
+  const filePaths = { mcraUserGenTemplatePath };
 
   handleResponseTo(adaptCliAnswer, filePaths);
 
@@ -125,13 +127,13 @@ test('adapt --> no changes option', () => {
   // If done reverse, the folder should be created.
   adapt();
   const adaptCliAnswer = { confirmChangesToBoilerplate: false };
-  const filePaths = { mcraUserGenTemplateTs };
+  const filePaths = { mcraUserGenTemplatePath };
 
   handleResponseTo(adaptCliAnswer, filePaths);
 
   const userGenTemplateExist = fs.existsSync('./user_gen_templates');
   expect(userGenTemplateExist).toBe(false);
 
-  const mcraUserPreferencesDirHasBeenCreated = fs.existsSync('./build/adapt/mcra-user-preferences');
+  const mcraUserPreferencesDirHasBeenCreated = fs.existsSync(mcraUserPreferencesDir);
   expect(mcraUserPreferencesDirHasBeenCreated).toBe(true);
 });
