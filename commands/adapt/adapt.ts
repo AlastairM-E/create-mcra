@@ -3,7 +3,6 @@ export {};
 
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
 
 const inquirer = require('inquirer');
 const { handleResponseTo } = require('./handleResponseTo');
@@ -16,10 +15,10 @@ interface cliResponse {
 /* ADAPT */
 function adapt(): void {
   /* VARIABLES */
-  const mcraUserPreferences = path.join(process.cwd(), 'mcra-user-preferences');
+  const mcraUserPreferences = path.join(__dirname, '../../mcra-user-preferences');
   const mcraUserGenTemplatePath = `${mcraUserPreferences}/user_gen_templates.ts`;
   const userGenTemplatesAlreadyExists = fs.existsSync(mcraUserGenTemplatePath);
-
+  console.log({ mcraUserPreferences, doesExist: fs.existsSync(mcraUserPreferences) });
   /* LOGIC */
   if (fs.existsSync(mcraUserPreferences) === false) {
     fs.mkdirSync(mcraUserPreferences);
