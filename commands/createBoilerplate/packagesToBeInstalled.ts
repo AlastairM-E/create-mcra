@@ -2,9 +2,8 @@ export {};
 
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
 
-const pathToMcraUserPrefencesDir = path.join(process.cwd(), 'mcra-user-preferences');
+const pathToMcraUserPrefencesDir = path.join(__dirname, '../mcra-user-preferences');
 const pathToImpJson = path.join(pathToMcraUserPrefencesDir, 'imp.json');
 
 function packagesToBeInstalled(): [string, void | string[]] {

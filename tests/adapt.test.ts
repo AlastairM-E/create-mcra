@@ -4,7 +4,7 @@ const process = require('process');
 const adapt = require('../build/adapt/adapt');
 const { handleResponseTo } = require('../build/adapt/handleResponseTo');
 
-const mcraUserPreferencesDir = path.join(process.cwd(), 'mcra-user-preferences');
+const mcraUserPreferencesDir = path.join(process.cwd(), '../mcra-user-preferences');
 const mcraUserGenTemplatePath = path.join(process.cwd(), 'mcra-user-preferences/user_gen_templates.ts');
 
 /* CLEAN UP ADAPT COMMAND */

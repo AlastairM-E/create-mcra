@@ -2,12 +2,11 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
 const faker = require('faker');
 const { initialImpJsonfile } = require('./fixtures/imp/index.ts');
 const { packagesToBeInstalled } = require('../build/createBoilerplate/index');
 
-const pathToMcraUserPrefencesDir = path.join(process.cwd(), 'mcra-user-preferences');
+const pathToMcraUserPrefencesDir = path.join(__dirname, '../mcra-user-preferences');
 const pathToImpJson = path.join(pathToMcraUserPrefencesDir, 'imp.json');
 
 /* CLEAN UP */

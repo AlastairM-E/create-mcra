@@ -2,7 +2,6 @@ export {};
 
 const path = require('path');
 const fs = require('fs');
-const process = require('process');
 
 function impJsonContent(impJson: string): { cli: string; packages: string[] } {
   if (fs.existsSync(impJson)) {
@@ -17,7 +16,7 @@ function sanitizeItem(item: any): string {
 
 function imp(args: string[]): void {
   const [, flag, ...newUnsanitizedPackages] = args;
-  const mcraUserPreferences = path.join(process.cwd(), './mcra-user-preferences');
+  const mcraUserPreferences = path.join(__dirname, '../mcra-user-preferences');
   const impJson = path.join(mcraUserPreferences, 'imp.json');
 
   if (fs.existsSync(mcraUserPreferences) === false) {
