@@ -6,15 +6,21 @@ const { handleResponseTo } = require('../build/adapt/handleResponseTo');
 const mcraUserPreferencesDir = path.join(__dirname, '../mcra-user-preferences');
 const mcraUserGenTemplatePath = path.join(__dirname, 'mcra-user-preferences/user_gen_templates.ts');
 
+
 /* CLEAN UP ADAPT COMMAND */
 // check whether the user_gen_templates.ts file exists
 // If it does, then unlink (default else, don't do anything).
 function cleanUpAdaptCommand() {
-  if (fs.existsSync(mcraUserGenTemplatePath)) {
-    fs.unlinkSync(mcraUserGenTemplatePath);
+  const changedMcraUserGenTemplatePath = path.join(__dirname, '../mcra-user-preferences/user_gen_templates.ts');
+  if (fs.existsSync(changedMcraUserGenTemplatePath)) {
+    fs.unlinkSync(changedMcraUserGenTemplatePath);
   }
-  fs.rmdirSync(mcraUserPreferencesDir);
+  if (fs.existsSync(mcraUserPreferencesDir)) fs.rmdirSync(mcraUserPreferencesDir);
 }
+
+beforeEach(() => {
+  cleanUpAdaptCommand();
+});
 
 afterEach(() => {
   cleanUpAdaptCommand();
@@ -52,12 +58,14 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
   // Check that the file exists in the mcra-user-preferences fodler in the build/adapt folder.
   // Check the content is equal to the new content of the user gen template
   // and not the only template content
+  const changedMcraUserGenTemplatePath = path.join(__dirname, '../mcra-user-preferences/user_gen_templates.ts');
   function checkAdaptEditingBoilerplateWorks(fixturePath: string): void {
     adapt();
 
     const userGenTemplateTextContent = fs.readFileSync('./user_gen_templates.ts', 'utf8');
     const adaptCliAnswer = { confirmChangesToBoilerplate: true };
-    const filePaths = { mcraUserGenTemplatePath };
+    console.log({ changedMcraUserGenTemplatePath });
+    const filePaths = { mcraUserGenTemplatePath: changedMcraUserGenTemplatePath };
     const fixturesGenTemplate = fs.readFileSync(path.join(__dirname, fixturePath), 'utf8');
 
     fs.writeFileSync('./user_gen_templates.ts', fixturesGenTemplate);
@@ -66,10 +74,10 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
     handleResponseTo(adaptCliAnswer, filePaths);
 
-    expect(fs.existsSync(mcraUserGenTemplatePath)).toBe(true);
+    expect(fs.existsSync(changedMcraUserGenTemplatePath)).toBe(true);
 
     const mcraUserPreferenceUserGenTemplates = fs.readFileSync(
-      mcraUserGenTemplatePath,
+      changedMcraUserGenTemplatePath,
       'utf8',
     );
 
@@ -102,12 +110,12 @@ test('testing mcra adapt works at the beginning and the yes option.', () => {
 
   const updatedUserGenTemplates = fs.readFileSync('./user_gen_templates.ts', 'utf8');
   const currentMcraUserGenTemplates = fs.readFileSync(
-    mcraUserGenTemplatePath,
+    changedMcraUserGenTemplatePath,
     'utf8',
   );
 
   const adaptCliAnswer = { confirmChangesToBoilerplate: false };
-  const filePaths = { mcraUserGenTemplatePath };
+  const filePaths = { changedMcraUserGenTemplatePath };
 
   handleResponseTo(adaptCliAnswer, filePaths);
 

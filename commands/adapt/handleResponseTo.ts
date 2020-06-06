@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 interface answer {
     confirmChangesToBoilerplate: boolean;

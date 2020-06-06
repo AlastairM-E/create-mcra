@@ -18,7 +18,7 @@ function adapt(): void {
   const mcraUserPreferences = path.join(__dirname, '../../mcra-user-preferences');
   const mcraUserGenTemplatePath = `${mcraUserPreferences}/user_gen_templates.ts`;
   const userGenTemplatesAlreadyExists = fs.existsSync(mcraUserGenTemplatePath);
-  console.log({ mcraUserPreferences, doesExist: fs.existsSync(mcraUserPreferences) });
+  console.log({ mcraUserPreferences, doesExist: fs.existsSync(mcraUserPreferences), mcraUserGenTemplatePath });
   /* LOGIC */
   if (fs.existsSync(mcraUserPreferences) === false) {
     fs.mkdirSync(mcraUserPreferences);
@@ -41,9 +41,11 @@ function adapt(): void {
     message: 'Do you to save the changes : ',
   };
 
-
   inquirer.prompt(question).then((answer: cliResponse) => {
-    const filePaths = { userGenTemplatesAlreadyExists, mcraUserGenTemplatePath };
+    const filePaths = {
+      userGenTemplatesAlreadyExists,
+      mcraUserGenTemplatePath
+    };
     handleResponseTo(answer, filePaths);
   });
 
